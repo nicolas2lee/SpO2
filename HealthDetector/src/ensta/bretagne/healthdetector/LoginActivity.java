@@ -1,11 +1,12 @@
 package ensta.bretagne.healthdetector;
 
-import ensta.bretagne.healthdetector.GUI;
+import ensta.bretagne.healthdetector.GUIActivity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -49,6 +50,8 @@ public class LoginActivity extends Activity {
     // UI references.
     private EditText mEmailView;
     private EditText mPasswordView;
+    
+    private View mRegister;
     private View mLoginFormView;
     private View mLoginStatusView;
     private TextView mLoginStatusMessageView;
@@ -60,10 +63,21 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
-        mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
+        mEmail = getIntent().getStringExtra("email");
         mEmailView = (EditText) findViewById(R.id.email);
         mEmailView.setText(mEmail);
+        
+        mPassword = getIntent().getStringExtra("password");
+        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setText(mPassword);
 
+        mRegister = (View) findViewById(R.id.register_text);
+       
+        mRegister.setOnClickListener(new View.OnClickListener(){
+        	 public void onClick(View view) {
+                 startActivity(new Intent(getBaseContext(), RegisterActivity.class));
+             }
+        });
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -102,7 +116,7 @@ public class LoginActivity extends Activity {
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
-    	startActivity(new Intent(this, GUI.class));  
+    	startActivity(new Intent(this, GUIActivity.class));  
         if (mAuthTask != null) {
             return;
         }
