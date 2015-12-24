@@ -1,12 +1,25 @@
 package ensta.bretagne.healthdetector;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import ensta.bretagne.healthdetector.GUIActivity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -116,11 +129,9 @@ public class LoginActivity extends Activity {
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
-    	startActivity(new Intent(this, GUIActivity.class));  
         if (mAuthTask != null) {
             return;
         }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -164,10 +175,24 @@ public class LoginActivity extends Activity {
             mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
             showProgress(true);
             mAuthTask = new UserLoginTask();
-            mAuthTask.execute((Void) null);
+        
+			mAuthTask.execute("https://www.google.fr");
+				//startActivity(new Intent(this, GUIActivity.class));  
+			
+          
         }
     }
+    
+    /*
+     * http addr: post http://haggis.ensta-bretagne.fr:3000/sessions
+     * http header: content-type: application/json
+     * http body
+     * { "session":
+		{"name": "nicolas2lee", "password":"zt3931221","remember_me":1}
+	   }*/
 
+
+    
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -212,40 +237,69 @@ public class LoginActivity extends Activity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    
+    /*good explanation about AsyncTask
+     * http://stackoverflow.com/questions/25647881/android-asynctask-example-and-explanation/25647882#25647882
+     * */
+    public class UserLoginTask extends AsyncTask<String, Void, String> {
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected String doInBackground(String... params) {
             // TODO: attempt authentication against a network service.
-
+        	HttpClient httpclient = new DefaultHttpClient();
+        	HttpResponse response;
+        	String responseString = null;
             try {
+            	try {
+					response = httpclient.execute(new HttpGet(params[0]));
+					StatusLine statusLine = response.getStatusLine();
+					if (statusLine.getStatusCode() == HttpStatus.SC_OK){
+						ByteArrayOutputStream out = new ByteArrayOutputStream();
+						response.getEntity().writeTo(out);
+						responseString = out.toString();
+						out.close();
+					}else{
+						  //Closes the connection.
+		                response.getEntity().getContent().close();
+		                throw new IOException(statusLine.getReasonPhrase());
+					}
+				} catch (ClientProtocolException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
-                return false;
+                return "error";
             }
 
+            /*
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
-            }
+            }*/
 
             // TODO: register the new account here.
-            return true;
+            return "true";
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(String success) {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
+            if (success == "true") {
                 finish();
+                startActivity(new Intent(getBaseContext(), GUIActivity.class)); 
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
+                
             }
         }
 
