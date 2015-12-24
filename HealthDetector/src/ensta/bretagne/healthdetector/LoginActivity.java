@@ -269,8 +269,8 @@ public class LoginActivity extends Activity {
         	try {
         	        // Add your data
         	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-        	        nameValuePairs.add(new BasicNameValuePair("name", mEmail));
-        	        nameValuePairs.add(new BasicNameValuePair("password", mPassword));
+        	        nameValuePairs.add(new BasicNameValuePair("[session][name]", mEmail));
+        	        nameValuePairs.add(new BasicNameValuePair("[session][password]", mPassword));
         	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
         	        // Execute HTTP Post Request
