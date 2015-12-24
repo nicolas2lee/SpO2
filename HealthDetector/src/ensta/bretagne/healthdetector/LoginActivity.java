@@ -2,16 +2,25 @@ package ensta.bretagne.healthdetector;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import ensta.bretagne.healthdetector.GUIActivity;
 
@@ -36,6 +45,9 @@ import android.widget.TextView;
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
+/*Asyc task googd explnation
+ * http://www.cnblogs.com/over140/archive/2011/02/17/1956634.html
+ * */
 public class LoginActivity extends Activity {
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -68,6 +80,9 @@ public class LoginActivity extends Activity {
     private View mLoginFormView;
     private View mLoginStatusView;
     private TextView mLoginStatusMessageView;
+    
+   
+ 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +100,7 @@ public class LoginActivity extends Activity {
         mPasswordView.setText(mPassword);
 
         mRegister = (View) findViewById(R.id.register_text);
+       
        
         mRegister.setOnClickListener(new View.OnClickListener(){
         	 public void onClick(View view) {
@@ -155,6 +171,7 @@ public class LoginActivity extends Activity {
         }
 
         // Check for a valid email address.
+        /*
         if (TextUtils.isEmpty(mEmail)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
@@ -163,7 +180,7 @@ public class LoginActivity extends Activity {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
-        }
+        }*/
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -176,7 +193,7 @@ public class LoginActivity extends Activity {
             showProgress(true);
             mAuthTask = new UserLoginTask();
         
-			mAuthTask.execute("https://www.google.fr");
+			mAuthTask.execute("http://haggis.ensta-bretagne.fr:3000/sessions");
 				//startActivity(new Intent(this, GUIActivity.class));  
 			
           
@@ -242,12 +259,46 @@ public class LoginActivity extends Activity {
      * http://stackoverflow.com/questions/25647881/android-asynctask-example-and-explanation/25647882#25647882
      * */
     public class UserLoginTask extends AsyncTask<String, Void, String> {
+    	
+    	private String responseString = null;
         @Override
         protected String doInBackground(String... params) {
             // TODO: attempt authentication against a network service.
         	HttpClient httpclient = new DefaultHttpClient();
-        	HttpResponse response;
-        	String responseString = null;
+        	HttpPost httppost = new HttpPost(params[0]);
+        	try {
+        	        // Add your data
+        	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+        	        nameValuePairs.add(new BasicNameValuePair("name", mEmail));
+        	        nameValuePairs.add(new BasicNameValuePair("password", mPassword));
+        	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+        	        // Execute HTTP Post Request
+        	        HttpResponse response = httpclient.execute(httppost);
+        	        StatusLine statusLine = response.getStatusLine();
+					if (statusLine.getStatusCode() == HttpStatus.SC_OK){
+						ByteArrayOutputStream out = new ByteArrayOutputStream();
+						response.getEntity().writeTo(out);
+						responseString = out.toString();
+						out.close();
+					}else{
+						  //Closes the connection.
+		                response.getEntity().getContent().close();
+		                throw new IOException(statusLine.getReasonPhrase());
+		               
+					}
+
+        	    } catch (ClientProtocolException e) {
+        	        // TODO Auto-generated catch block
+        	    	return "error";
+        	    } catch (IOException e) {
+        	        // TODO Auto-generated catch block
+        	    	return "error";
+        	} 
+        	return "true";
+                
+              
+        	/*
             try {
             	try {
 					response = httpclient.execute(new HttpGet(params[0]));
@@ -274,7 +325,7 @@ public class LoginActivity extends Activity {
             } catch (InterruptedException e) {
                 return "error";
             }
-
+*/
             /*
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
@@ -285,7 +336,7 @@ public class LoginActivity extends Activity {
             }*/
 
             // TODO: register the new account here.
-            return "true";
+           
         }
 
         @Override
