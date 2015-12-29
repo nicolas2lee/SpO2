@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "F:\\Git_repertoire\\Android-FirstApp\\HealthDetector\\app\\build\\intermediates\\res\\merged\\debug\\menu\\activity_login.xml",
+        "source": "F:\\Git_repertoire\\Android-FirstApp\\HealthDetector\\app\\src\\main\\res\\menu\\activity_login.xml"
+    },
+    {
+        "merged": "F:\\Git_repertoire\\Android-FirstApp\\HealthDetector\\app\\build\\intermediates\\res\\merged\\debug\\menu\\activity_gui.xml",
+        "source": "F:\\Git_repertoire\\Android-FirstApp\\HealthDetector\\app\\src\\main\\res\\menu\\activity_gui.xml"
+    },
+    {
+        "merged": "F:\\Git_repertoire\\Android-FirstApp\\HealthDetector\\app\\build\\intermediates\\res\\merged\\debug\\menu\\activity_register.xml",
+        "source": "F:\\Git_repertoire\\Android-FirstApp\\HealthDetector\\app\\src\\main\\res\\menu\\activity_register.xml"
+    }
+]

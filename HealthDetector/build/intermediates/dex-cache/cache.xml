@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="F:\Git_repertoire\Android-FirstApp\HealthDetector\app\Libs\mpandroidchartlibrary-2-1-6.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="3f8beaf2f9b5357717e0b1ef9f6820e517784ea1">
+        <dex dex="F:\Git_repertoire\Android-FirstApp\HealthDetector\app\build\intermediates\pre-dexed\debug\mpandroidchartlibrary-2-1-6_83d6df20bb0e7215a231e032a7009c2c1860a671.jar" />
+    </item>
+
+</items>
