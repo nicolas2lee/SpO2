@@ -13,11 +13,19 @@ public class GUIActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_gui);
-		findViewById(R.id.show_chart_button).setOnClickListener(new View.OnClickListener(){
+		findViewById(R.id.show_chart_button).setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
 				startActivity(new Intent(getBaseContext(), StaticChartsActivity.class));
+			}
+		});
+
+		findViewById(R.id.realtime_chart_button).setOnClickListener(new View.OnClickListener(){
+
+			@Override
+			public void onClick(View view) {
+				startActivity(new Intent(getBaseContext(), RealTimeChartActivity.class));
 			}
 		});
 	}

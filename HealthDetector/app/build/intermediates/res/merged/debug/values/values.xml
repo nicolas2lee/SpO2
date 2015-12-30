@@ -2,6 +2,7 @@
 <resources>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <string name="action_realtime">Real time</string>
     <string name="action_register">Register</string>
     <string name="action_register_text">Not a Member? Register now.</string>
     <string name="action_show_chart">Show Chart</string>
@@ -22,6 +23,7 @@
     <string name="register_progress_registering">Registering…</string>
     <string name="test_register">test register</string>
     <string name="title_activity_gui">GUI</string>
+    <string name="title_activity_real_time_chart">RealTimeChart</string>
     <string name="title_activity_register">Register</string>
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
