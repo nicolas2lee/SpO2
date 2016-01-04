@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <string name="action_realtime">Real time</string>
+    <string name="action_register">Register</string>
+    <string name="action_register_text">Not a Member? Register now.</string>
+    <string name="action_show_chart">Show Chart</string>
+    <string name="action_sign_in"><b>Sign in</b></string>
+    <string name="app_name">Health ENSTA B OpenLab</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="login_progress_signing_in">Signing in…</string>
+    <string name="menu_forgot_password">Recover lost password</string>
+    <string name="menu_settings">Settings</string>
+    <string name="prompt_confirm_password">Confirm password</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_username">Username</string>
+    <string name="register_progress_registering">Registering…</string>
+    <string name="test_register">test register</string>
+    <string name="title_activity_gui">GUI</string>
+    <string name="title_activity_real_time_chart">RealTimeChart</string>
+    <string name="title_activity_register">Register</string>
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+
+        -->
+    </style>
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    <style name="LoginFormContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">16dp</item>
+    </style>
+    <style name="RegisterFormContainer">
+        
+    </style>
+</resources>
