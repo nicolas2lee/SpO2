@@ -1,0 +1,4 @@
+INDEX VERSION 1.126+U:\semestre5\PROJETuv5.4\SpO2\.metadata\.plugins\org.eclipse.jdt.core
+1378574051.index
+769614135.index
+367881512.index

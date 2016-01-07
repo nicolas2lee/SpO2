@@ -1,0 +1,6 @@
+INDEX VERSION 1.126+U:\semestre5\PROJETuv5.4\SpO2\HealthDetectorXinrui\.metadata\.plugins\org.eclipse.jdt.core
+1378574051.index
+3591216445.index
+1390734552.index
+4259674713.index
+1424742700.index
