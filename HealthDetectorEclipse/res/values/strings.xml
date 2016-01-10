@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Health ENSTA B OpenLab</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_gui">GUI</string>
+    <string name="title_activity_register">Register</string>
+    <string name="action_show_chart">Show Chart</string>
+    <string name="title_activity_real_time_chart">RealTimeChart</string>
+
+</resources>
