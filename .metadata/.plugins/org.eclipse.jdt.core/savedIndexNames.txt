@@ -1,0 +1,11 @@
+INDEX VERSION 1.126+U:\semestre5\Android\SpO2\.metadata\.plugins\org.eclipse.jdt.core
+985413812.index
+3591216445.index
+1747333034.index
+4259674713.index
+2200679293.index
+1894877178.index
+834853709.index
+1343069623.index
+1424742700.index
+2121370479.index

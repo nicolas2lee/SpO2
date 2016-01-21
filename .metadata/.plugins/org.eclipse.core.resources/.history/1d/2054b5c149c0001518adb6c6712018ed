@@ -1,0 +1,22 @@
+package ensta.bretagne.helathdetectorversioneclipse;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+
+public class RealTimeChartActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_real_time_chart);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.activity_real_time_chart, menu);
+		return true;
+	}
+
+}
