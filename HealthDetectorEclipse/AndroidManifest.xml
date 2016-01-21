@@ -13,10 +13,15 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
         <activity
             android:name="ensta.bretagne.healthdetector.Spo2_LoginActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateVisible" >
+            <inter-filter>
+            	<action android:name="android.intent.action.Main" />
+            	<category android:name="android.intent.category.LAUNCHER" />    
+            </inter-filter>
         </activity>
         <activity
             android:name="ensta.bretagne.healthdetector.GUIActivity"
