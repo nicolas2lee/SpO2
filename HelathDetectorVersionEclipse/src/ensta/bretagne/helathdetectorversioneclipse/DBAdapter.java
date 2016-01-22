@@ -35,9 +35,9 @@ public class DBAdapter extends Activity {
     //need sensorid for table measurement
     
     //key word for table Health_data
-    static final String KEY_HEALTH_DATA = "health_data_id";
-    static final String KEY_DEBIT_O2 = "debit_o2";
-    static final String KEY_datetime = "datetime";
+    static final String KEY_HEALTHDATA = "health_data_id";
+    static final String KEY_DEBITO2 = "debit_o2";
+    static final String KEY_DATETIME = "datetime";
     //need measurementid for table Health_data
     
     static final String TAG = "DBAdapter";
@@ -46,30 +46,43 @@ public class DBAdapter extends Activity {
     static final String TABLE_USER = "user";
     static final String TABLE_SENSOR = "sensor";
     static final String TABLE_MEASUREMENT = "measurement";
-    static final String TABLE_HEALTH_DATA = "health_data";
+    static final String TABLE_HEALTHDATA = "health_data";
     
     static final int DATABASE_VERSION = 1;
 
     static final String CREATE_TABLE_USER = "CREATE TABLE "+TABLE_USER+
-    		" ("+KEY_USERID +" integer primary key autoincrement, "+
-    		KEY_USERNAME +" text not null, " 
+    		" ("+KEY_USERID +" integer primary key autoincrement, "
+    		+ KEY_USERNAME +" text not null, "
+    		+ KEY_EMAIL + " text not null, "
     		+ KEY_PASSWORD +" text not null, " 
-    		+ KEY_TYPE+" text not null, "
-    		+ KEY_UNITY+" text not null, "
-    		+ KEY_TOKEN+ " text not null"
-    		+ ")";
-    
-    static final String CREATE_TABLE_SENSOR = "CREATE TABLE "+TABLE_SENSOR+
-    		" ("+KEY_SENSORID +" integer primary key autoincrement, "+
-    		KEY_SENSORNAME +" text not null, " 
-    		+ KEY_PASSWORD +" text not null, " 
-    		+ KEY_EMAIL+" text not null, "
     		+ KEY_ROLE+" text not null "
     		+ ")";
     
-    static final String DATABASE_CREATE = "Create table user (user_id integer primary key autoincrement, "+
-            "username text not null, email text not null, password text not null, " +
-            "role text not null )";
+    static final String CREATE_TABLE_SENSOR = "CREATE TABLE "+TABLE_SENSOR+
+    		" ("+KEY_SENSORID +" integer primary key autoincrement, "
+    		+ KEY_SENSORNAME +" text, " 
+    		+ KEY_TYPE+" text, "
+    		+ KEY_UNITY+" text, "
+    		+ KEY_TOKEN+ " text "
+    		+ ")";
+    
+    static final String CREATE_TABLE_MEASUREMENT = "CREATE TABLE "+TABLE_MEASUREMENT+
+    		" ("+KEY_MEASUREMENTID +" integer primary key autoincrement, "
+    		+ KEY_TBEGIN +" text, " 
+    		+ KEY_TEND +" text, "
+    		+ KEY_SENSORID+" integer "
+    		+ ")";
+    
+    static final String CREATE_TABLE_HEALTHDATA = "CREATE TABLE "+TABLE_HEALTHDATA+
+    		" ("+KEY_HEALTHDATA +" integer primary key autoincrement, "
+    		+ KEY_DEBITO2 +" text, " 
+    		+ KEY_DATETIME+" text, "
+    		+ KEY_MEASUREMENTID+ " integer "
+    		+ ")";
+    
+ //   static final String DATABASE_CREATE = "Create table user (user_id integer primary key autoincrement, "+
+ //           "username text not null, email text not null, password text not null, " +
+ //           "role text not null )";
    // static final String DATABASE_CREATE = "Create table contacts (_id integer primary key autoincrement, "+
    //         "username text not null, password text not null, email text not null)";
     
@@ -94,6 +107,8 @@ public class DBAdapter extends Activity {
             	Log.i("create Database","created");
                 db.execSQL(CREATE_TABLE_USER);
                 db.execSQL(CREATE_TABLE_SENSOR);
+                db.execSQL(CREATE_TABLE_MEASUREMENT);
+                db.execSQL(CREATE_TABLE_HEALTHDATA);
             }catch(SQLException e){
                 e.printStackTrace();
             }
@@ -103,6 +118,9 @@ public class DBAdapter extends Activity {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data");
             db.execSQL("DROP TABLE IF EXISTS user");
+            db.execSQL("DROP TABLE IF EXISTS sensor");
+            db.execSQL("DROP TABLE IF EXISTS measurement");
+            db.execSQL("DROP TABLE IF EXISTS health_data");
             onCreate(db);
         }
         
