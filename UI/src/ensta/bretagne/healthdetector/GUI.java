@@ -27,17 +27,17 @@ public class GUI extends Activity implements RadioGroup.OnCheckedChangeListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui);
-       /*
+      
         rg_tab_bar = (RadioGroup) findViewById(R.id.rg_tab_bar);
         rg_tab_bar.setOnCheckedChangeListener(this);
 
         rb_user = (RadioButton) findViewById(R.id.man);
-        rb_user.setChecked(true);*/
+        rb_user.setChecked(true);
     }
 
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
-		/*
+		
 		// TODO Auto-generated method stub
 		 FragmentTransaction fTransaction = fManager.beginTransaction();
 	        hideAllFragment(fTransaction);
@@ -69,11 +69,11 @@ public class GUI extends Activity implements RadioGroup.OnCheckedChangeListener{
 	        }
 	        fTransaction.commit();
 	    }
-		private void hideAllFragment(FragmentTransaction fragmentTransaction){
-	        if(fg1 != null)fragmentTransaction.hide(fg1);
-	        if(fg2 != null)fragmentTransaction.hide(fg2);
-	        if(fg3 != null)fragmentTransaction.hide(fg3);*/
-	    }
+	private void hideAllFragment(FragmentTransaction fragmentTransaction){
+        if(fg1 != null)fragmentTransaction.hide(fg1);
+        if(fg2 != null)fragmentTransaction.hide(fg2);
+        if(fg3 != null)fragmentTransaction.hide(fg3);
+    }
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

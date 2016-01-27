@@ -10,7 +10,9 @@
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:orientation="horizontal">
-
+      
+       
+        
         <RadioButton
             android:id="@+id/man"
             style="@style/tab_menu_item"
@@ -30,6 +32,7 @@
             android:text="@string/txt_settings"/>
 
     </RadioGroup>
+
 
     <View
         android:id="@+id/div_tab_bar"
