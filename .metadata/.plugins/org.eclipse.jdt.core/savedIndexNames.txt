@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 INDEX VERSION 1.126+U:\semestre5\Android\SpO2\.metadata\.plugins\org.eclipse.jdt.core
 985413812.index
 3591216445.index
@@ -9,3 +10,13 @@ INDEX VERSION 1.126+U:\semestre5\Android\SpO2\.metadata\.plugins\org.eclipse.jdt
 1343069623.index
 1424742700.index
 2121370479.index
+=======
+INDEX VERSION 1.126+U:\semestre5\PROJETuv5.4\SpO2\.metadata\.plugins\org.eclipse.jdt.core
+1339369418.index
+1378574051.index
+3463982305.index
+3271193799.index
+2997397835.index
+769614135.index
+367881512.index
+>>>>>>> xinrui

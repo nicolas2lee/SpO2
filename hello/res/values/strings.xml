@@ -4,5 +4,14 @@
     <string name="app_name">hello</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+<<<<<<< HEAD:hello/res/values/strings.xml
 
+=======
+    <string name="title_activity_gui">GUI</string>
+  
+    <string name="his">history</string>
+ 	<string name="txt_settings">Settings</string>
+    <string name="txt_man">User</string>
+    <string name="txt_doctor">Medecin</string>
+>>>>>>> xinrui:HealthDetector/res/values/strings.xml
 </resources>

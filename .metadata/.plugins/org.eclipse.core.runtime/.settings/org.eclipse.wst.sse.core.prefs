@@ -1,2 +1,6 @@
 eclipse.preferences.version=1
+<<<<<<< HEAD
 task-tag-projects-already-scanned=HelathDetectorVersionEclipse,Hello
+=======
+task-tag-projects-already-scanned=UI,testRadioGroup,test
+>>>>>>> xinrui

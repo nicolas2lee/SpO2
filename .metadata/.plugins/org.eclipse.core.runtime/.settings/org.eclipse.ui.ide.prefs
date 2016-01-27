@@ -1,5 +1,9 @@
 PROBLEMS_FILTERS_MIGRATE=true
 eclipse.preferences.version=1
+<<<<<<< HEAD
 platformState=1453383480008
+=======
+platformState=1452158493050
+>>>>>>> xinrui
 quickStart=false
 tipsAndTricks=true
