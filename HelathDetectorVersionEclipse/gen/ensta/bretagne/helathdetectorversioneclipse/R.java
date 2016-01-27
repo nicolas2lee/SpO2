@@ -54,7 +54,7 @@ public final class R {
         public static final int ly_top_bar=0x7f090002;
         public static final int me=0x7f090005;
         public static final int medecin=0x7f090006;
-        public static final int menu_settings=0x7f09001b;
+        public static final int menu_settings=0x7f09001c;
         public static final int password=0x7f090015;
         public static final int radioGroup1=0x7f090004;
         public static final int realtime_chart=0x7f09000a;
@@ -65,6 +65,7 @@ public final class R {
         public static final int register_password=0x7f09000d;
         public static final int register_text=0x7f090017;
         public static final int setting=0x7f090007;
+        public static final int setting_list=0x7f09001b;
         public static final int show_chart_button=0x7f090000;
         public static final int sign_in_button=0x7f090016;
         public static final int test=0x7f090018;

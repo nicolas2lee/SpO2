@@ -30,8 +30,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -114,9 +116,9 @@ public class Spo2LoginActivity extends Activity {
             e.printStackTrace();
         }catch (IOException e){
             e.printStackTrace();
-        }
+        }*/
         // Set up the login form.
-        /*
+        
         mEmail = getIntent().getStringExtra("email");
         mEmailView = (EditText) findViewById(R.id.email);
         mEmailView.setText(mEmail);
@@ -135,14 +137,16 @@ public class Spo2LoginActivity extends Activity {
         });
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+       
+
+			@Override
+			public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+				if (id == R.id.login || id == EditorInfo.IME_NULL) {
                     attemptLogin();
                     return true;
                 }
                 return false;
-            }
+			}
         });
 
         mLoginFormView = findViewById(R.id.login_form);
@@ -154,7 +158,7 @@ public class Spo2LoginActivity extends Activity {
             public void onClick(View view) {
                 attemptLogin();
             }
-        });*/
+        });
     }
 
 

@@ -36,7 +36,8 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB) @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_gui);
+		setContentView(R.layout.activity_main);
+		
 		
 		 fManager = getFragmentManager();
 
@@ -77,28 +78,9 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 		        fTransaction.commit();
 		    }
 	       });
-	        /*
-			private void hideAllFragment(FragmentTransaction fragmentTransaction){
-		        if(fg1 != null)fragmentTransaction.hide(fg1);
-		        if(fg2 != null)fragmentTransaction.hide(fg2);
-		        if(fg3 != null)fragmentTransaction.hide(fg3);
-		    }*/
+	       
 		
-		findViewById(R.id.show_chart_button).setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				startActivity(new Intent(getBaseContext(), StaticChartsActivity.class));
-			}
-		});
-
-		findViewById(R.id.realtime_chart_button).setOnClickListener(new View.OnClickListener(){
-
-			@Override
-			public void onClick(View view) {
-				startActivity(new Intent(getBaseContext(), RealTimeChartActivity.class));
-			}
-		});
+		
 	}
 
 	@Override
