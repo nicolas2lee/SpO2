@@ -2,6 +2,8 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: "@AccountBundle/Resources/config/services.php" }
+    - { resource: "@GraphBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -38,27 +40,59 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
 
-# Doctrine Configuration
-doctrine:
-    dbal:
-        driver:   pdo_mysql
-        host:     "%database_host%"
-        port:     "%database_port%"
-        dbname:   "%database_name%"
-        user:     "%database_user%"
-        password: "%database_password%"
-        charset:  UTF8
-        # if using pdo_sqlite as your database driver:
-        #   1. add the path in parameters.yml
-        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
-        #   2. Uncomment database_path in parameters.yml.dist
-        #   3. Uncomment next line:
-        #     path:     "%database_path%"
 
-    orm:
-        auto_generate_proxy_classes: "%kernel.debug%"
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
+
+#doctrine_mongodb:
+#    document_managers:
+
+        # Prototype
+#        id:
+#            connection:                 ~
+#            database:                   ~
+#            default_repository_class:   Doctrine\ODM\MongoDB\DocumentRepository
+#            repository_factory:         ~
+#            logging:                    true
+#            auto_mapping:               false
+#            retry_connect:              0
+#            retry_query:                0
+#            metadata_cache_driver:
+#                type:                 ~
+#                class:                ~
+#                host:                 ~
+#                port:                 ~
+#                instance_class:       ~
+#            mappings:
+
+                # Prototype
+#               name:
+#                   mapping:              true
+#                    type:                 ~
+#                    dir:                  ~
+#                    prefix:               ~
+#                    alias:                ~
+#                    is_bundle:            ~
+#    connections:
+
+        # Prototype
+#        id:
+#            server:               ~
+#            options:
+#                connect:              ~
+#                persist:              ~
+#                timeout:              ~
+#                replicaSet:           ~
+#                username:             ~
+#                password:             ~
+#                db:                   ~
+#    proxy_namespace:      MongoDBODMProxies
+#    proxy_dir:            "%kernel.cache_dir%/doctrine/odm/mongodb/Proxies"
+#    auto_generate_proxy_classes:  false
+#    hydrator_namespace:   Hydrators
+#    hydrator_dir:         "%kernel.cache_dir%/doctrine/odm/mongodb/Hydrators"
+#    auto_generate_hydrator_classes:  false
+#    default_document_manager:  ~
+#    default_connection:   ~
+#    default_database:     default
 
 # Swiftmailer Configuration
 swiftmailer:

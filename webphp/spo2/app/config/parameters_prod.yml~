@@ -1,0 +1,11 @@
+parameters:
+    database_host_prod: 127.0.0.1
+    database_port_prod: null
+    database_name_prod: spo2
+    database_user_prod: root
+    database_password_prod: iamroot
+    mailer_transport_prod: smtp
+    mailer_host_prod: 127.0.0.1
+    mailer_user_prod: null
+    mailer_password_prod: null
+    secret_prod: 386fc86db1ad9260f1ab051055b1daf8b04b032e

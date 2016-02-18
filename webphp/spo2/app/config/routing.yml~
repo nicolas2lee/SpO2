@@ -1,0 +1,12 @@
+handledata:
+    resource: "@HandledataBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+account:
+    resource: "@AccountBundle/Resources/config/routing.php"
+    prefix:   /
+
+#app:
+#    resource: "@AppBundle/Controller/"
+#    type:     annotation

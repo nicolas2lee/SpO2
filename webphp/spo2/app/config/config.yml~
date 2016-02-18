@@ -1,0 +1,103 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+    - { resource: "@AccountBundle/Resources/config/services.php" }
+   
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: en
+
+framework:
+    #esi:             ~
+    #translator:      { fallbacks: ["%locale%"] }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    #serializer:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+        #assets_version: SomeVersionScheme
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    trusted_proxies: ~
+    session:
+        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id:  session.handler.native_file
+        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+    fragments:       ~
+    http_method_override: true
+    assets: ~
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+
+
+
+#doctrine_mongodb:
+#    document_managers:
+
+        # Prototype
+#        id:
+#            connection:                 ~
+#            database:                   ~
+#            default_repository_class:   Doctrine\ODM\MongoDB\DocumentRepository
+#            repository_factory:         ~
+#            logging:                    true
+#            auto_mapping:               false
+#            retry_connect:              0
+#            retry_query:                0
+#            metadata_cache_driver:
+#                type:                 ~
+#                class:                ~
+#                host:                 ~
+#                port:                 ~
+#                instance_class:       ~
+#            mappings:
+
+                # Prototype
+#               name:
+#                   mapping:              true
+#                    type:                 ~
+#                    dir:                  ~
+#                    prefix:               ~
+#                    alias:                ~
+#                    is_bundle:            ~
+#    connections:
+
+        # Prototype
+#        id:
+#            server:               ~
+#            options:
+#                connect:              ~
+#                persist:              ~
+#                timeout:              ~
+#                replicaSet:           ~
+#                username:             ~
+#                password:             ~
+#                db:                   ~
+#    proxy_namespace:      MongoDBODMProxies
+#    proxy_dir:            "%kernel.cache_dir%/doctrine/odm/mongodb/Proxies"
+#    auto_generate_proxy_classes:  false
+#    hydrator_namespace:   Hydrators
+#    hydrator_dir:         "%kernel.cache_dir%/doctrine/odm/mongodb/Hydrators"
+#    auto_generate_hydrator_classes:  false
+#    default_document_manager:  ~
+#    default_connection:   ~
+#    default_database:     default
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    spool:     { type: memory }
