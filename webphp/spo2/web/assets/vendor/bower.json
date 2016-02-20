@@ -1,0 +1,29 @@
+{
+  "name": "ensta888",
+  "homepage": "https://github.com/nicolas2lee/SpO2",
+  "authors": [
+    "nicolas2lee"
+  ],
+  "description": "Porject of spo2",
+  "main": "ensta888",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "test"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/assets/vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  }
+}
