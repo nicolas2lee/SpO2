@@ -13,8 +13,8 @@ class GraphEntryController extends Controller
     public function indexAction()
     {
 				//BundleName:DirectoryName:FileName
-        //return $this->render('GraphBundle:graph:index.html.twig');
-				return $this->render('graph/index.html.twig');
+        return $this->render('GraphBundle:graph:index.html.twig');
+				//return $this->render('graph/index.html.twig');
 				//return $this->render('start-bootstrap-sb-admin-1.0.4/index.html.twig');
     }
 

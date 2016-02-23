@@ -1,6 +1,5 @@
-{% extends 'layout/layout.html.twig' %}
-{% block custom_stylesheets %}
-{% endblock %}
+{% extends 'GraphBundle:layout:layout.html.twig' %}
+
      
 {% block title %}
 <title>Index | Graph</title>
