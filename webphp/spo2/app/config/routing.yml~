@@ -1,7 +1,9 @@
-handledata:
-    resource: "@HandledataBundle/Controller/"
+graph:
+    resource: "@GraphBundle/Controller/"
     type:     annotation
     prefix:   /
+
+
 
 account:
     resource: "@AccountBundle/Resources/config/routing.php"

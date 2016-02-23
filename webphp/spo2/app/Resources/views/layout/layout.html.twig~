@@ -1,0 +1,29 @@
+{# app/Resources/views/layout.html.twig #}
+<!DOCTYPE html>
+<html lang="en">
+<html>
+    <head>
+    <!-- Bootstrap Core CSS -->
+    <link href="/assets/vendor/startbootstrap-sb-admin-1.0.4/css/bootstrap.min.css" rel="stylesheet">
+		<!--link rel="stylesheet" href="{{ asset('vendor/startbootstrap-sb-admin-1.0.4/css/bootstrap.min.css') }}" /-->
+
+    <!-- Custom CSS -->
+    <link href="/assets/vendor/startbootstrap-sb-admin-1.0.4/css/sb-admin.css" rel="stylesheet">
+		<!--link rel="stylesheet" href="{{ asset('graph/vendor/startbootstrap-sb-admin-1.0.4/css/sb-admin.css') }}" /-->
+
+    <!-- Morris Charts CSS -->
+    <link href="/assets/vendor/startbootstrap-sb-admin-1.0.4/css/plugins/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/assets/vendor/startbootstrap-sb-admin-1.0.4/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		
+			{% block title %}{% endblock %}
+    </head>
+		<body>
+			<div id="wrapper">
+			{% include 'layout/_navigator.html.twig' %}
+			{% block main_body %} {% endblock %}
+			{% include 'layout/_footer.html.twig' %}
+    	</div>
+		</body>
+</html>

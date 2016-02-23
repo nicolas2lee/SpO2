@@ -4,10 +4,14 @@
     <head>
         {# ... #}
 
-        <link rel="stylesheet"
-            href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+    	<link rel="stylesheet"
+          href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+			{% block custom_stylesheets %}{% endblock %}
     </head>
 		<body>
+			{% block _header %}{% endblock %}
+			{% block main_body %} {% endblock %}
+			{% block _footer %}{% endblock %}
 		</body>
     {# ... #}
 </html>
