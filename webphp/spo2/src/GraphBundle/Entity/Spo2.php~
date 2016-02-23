@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Spo2
  *
- * @ORM\Table(name="spo2")
+ * @ORM\Table(name="Spo2")
  * @ORM\Entity(repositoryClass="GraphBundle\Repository\Spo2Repository")
  */
 class Spo2
@@ -22,13 +22,13 @@ class Spo2
     private $id;
 
 		/**
-    * @ORM\Column(type="double")
+    * @ORM\Column(type="string")
     */
-		private $oxygenrate;
+		private $saturation;
 
-		 /**
-   * @ORM\Column(type="string", length=100)
-   */
+		/**
+    * @ORM\Column(type="string", length=100)
+    */
 		private $datetime;
 
     /**

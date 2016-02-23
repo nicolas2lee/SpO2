@@ -49,7 +49,7 @@ class User
 
 		public function setPassword($password)
     {
-        return $this->username = $password;
+        return $password->username = $password;
     }
 
 		

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Sensor
  *
- * @ORM\Table(name="sensor")
+ * @ORM\Table(name="Sensor")
  * @ORM\Entity(repositoryClass="GraphBundle\Repository\SensorRepository")
  */
 class Sensor
@@ -32,7 +32,7 @@ class Sensor
 		private $type;
 
 	 /**
-   * @ORM\Column(type="int")
+   * @ORM\Column(type="integer")
    */
     private $user_id;
 
@@ -45,5 +45,76 @@ class Sensor
     {
         return $this->id;
     }
-}
 
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Sensor
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Sensor
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set userId
+     *
+     * @param integer $userId
+     *
+     * @return Sensor
+     */
+    public function setUserId($userId)
+    {
+        $this->user_id = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get userId
+     *
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+}

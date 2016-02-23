@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Spo2
  *
- * @ORM\Table(name="spo2")
+ * @ORM\Table(name="Spo2")
  * @ORM\Entity(repositoryClass="GraphBundle\Repository\Spo2Repository")
  */
 class Spo2
@@ -22,9 +22,9 @@ class Spo2
     private $id;
 
 		/**
-    * @ORM\Column(type="double")
+    * @ORM\Column(type="string")
     */
-		private $oxygenrate;
+		private $saturation;
 
 		/**
     * @ORM\Column(type="string", length=100)
@@ -40,5 +40,52 @@ class Spo2
     {
         return $this->id;
     }
-}
 
+    /**
+     * Set saturation
+     *
+     * @param string $saturation
+     *
+     * @return Spo2
+     */
+    public function setSaturation($saturation)
+    {
+        $this->saturation = $saturation;
+
+        return $this;
+    }
+
+    /**
+     * Get saturation
+     *
+     * @return string
+     */
+    public function getSaturation()
+    {
+        return $this->saturation;
+    }
+
+    /**
+     * Set datetime
+     *
+     * @param string $datetime
+     *
+     * @return Spo2
+     */
+    public function setDatetime($datetime)
+    {
+        $this->datetime = $datetime;
+
+        return $this;
+    }
+
+    /**
+     * Get datetime
+     *
+     * @return string
+     */
+    public function getDatetime()
+    {
+        return $this->datetime;
+    }
+}

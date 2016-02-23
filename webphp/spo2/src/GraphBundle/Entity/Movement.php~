@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Movement
  *
- * @ORM\Table(name="movement")
+ * @ORM\Table(name="Movement")
  * @ORM\Entity(repositoryClass="GraphBundle\Repository\MovementRepository")
  */
 class Movement
@@ -21,21 +21,45 @@ class Movement
      */
     private $id;
 
+		/**
+    * @ORM\Column(type="integer")
+    */
 		private $nb_steps;
 
+		/**
+    * @ORM\Column(type="string")
+    */
 		private $MI; #0~1
 
+		/**
+    * @ORM\Column(type="string")
+    */
 		private $class;
 
+		/**
+    * @ORM\Column(type="string")
+    */
 		private $AEE;#Activity Related Energy Expendition
 
+		/**
+    * @ORM\Column(type="string")
+    */
 		private $TEE; #Totle Energy Expendition
 
+		/**
+    * @ORM\Column(type="string")
+    */
 		private $VMU; #Activity Score
 
-		private $start_time;
+		/**
+    * @ORM\Column(type="string")
+    */
+		private $tstart;
 
-		private $end_time;
+		/**
+    * @ORM\Column(type="string")
+    */
+		private $duration;
 
 
     /**
