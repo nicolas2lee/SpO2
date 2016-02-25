@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use GraphBundle\Entity\Sensor;
 use GraphBundle\Form\SensorType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 
 /**
  * Sensor controller.
@@ -44,6 +46,10 @@ class SensorController extends Controller
     {
         $sensor = new Sensor();
         $form = $this->createForm('GraphBundle\Form\SensorType', $sensor);
+				$form->add('submit', SubmitType::class, array(
+            'label' => 'Create',
+            'attr'  => array('class' => 'btn btn-default pull-right')
+        ));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

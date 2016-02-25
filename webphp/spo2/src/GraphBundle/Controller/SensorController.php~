@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use GraphBundle\Entity\Sensor;
 use GraphBundle\Form\SensorType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 
 /**
  * Sensor controller.
@@ -28,9 +30,10 @@ class SensorController extends Controller
 
         $sensors = $em->getRepository('GraphBundle:Sensor')->findAll();
 
-        return $this->render('sensor/index.html.twig', array(
+       /* return $this->render('sensor/index.html.twig', array(
             'sensors' => $sensors,
-        ));
+        ));*/
+				return $this->render('sensor/index.html.twig');
     }
 
     /**
@@ -43,6 +46,7 @@ class SensorController extends Controller
     {
         $sensor = new Sensor();
         $form = $this->createForm('GraphBundle\Form\SensorType', $sensor);
+			
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
