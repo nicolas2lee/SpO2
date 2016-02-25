@@ -101,6 +101,21 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
 
         if (0 === strpos($pathinfo, '/graph')) {
+            // chart
+            if (rtrim($pathinfo, '/') === '/graph/chart') {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_chart;
+                }
+
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'chart');
+                }
+
+                return array (  '_controller' => 'GraphBundle\\Controller\\ChartController::indexAction',  '_route' => 'chart',);
+            }
+            not_chart:
+
             // graph_graphentry_index
             if (rtrim($pathinfo, '/') === '/graph') {
                 if (substr($pathinfo, -1) !== '/') {
