@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Sensor
  *
- * @ORM\Table(name="sensor")
+ * @ORM\Table(name="Sensor")
  * @ORM\Entity(repositoryClass="GraphBundle\Repository\SensorRepository")
  */
 class Sensor
