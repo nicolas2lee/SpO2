@@ -1,0 +1,5 @@
+{% block title %} Chart | Index{% endblock %}
+{% block main_body %}
+
+chart
+{% endblock %}
