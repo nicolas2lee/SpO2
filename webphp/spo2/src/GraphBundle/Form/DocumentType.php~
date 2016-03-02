@@ -7,6 +7,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 
 
@@ -19,7 +21,14 @@ class DocumentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('attachment', FileType::class)
+						->add('type',ChoiceType::class, array(
+    											'choices'  => array(
+																			'' => '',
+        															'SpO2' => 'spo2',
+        															'Accelerometer' => 'accelerometer',
+        															 ))
+   							 )							
+						->add('name', FileType::class)	
         ;
     }
     
