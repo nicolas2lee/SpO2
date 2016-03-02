@@ -6,10 +6,11 @@ class ProjectServiceContainer extends Container
     public function getFooService($lazyLoad = true)
     {
         if ($lazyLoad) {
+            $container = $this;
 
-            return $this->services['foo'] = new stdClass_%s(
-                function (&$wrappedInstance, \ProxyManager\Proxy\LazyLoadingInterface $proxy) {
-                    $wrappedInstance = $this->getFooService(false);
+            return $this->services['foo'] =%sstdClass_%s(
+                function (&$wrappedInstance, \ProxyManager\Proxy\LazyLoadingInterface $proxy) use ($container) {
+                    $wrappedInstance = $container->getFooService(false);
 
                     $proxy->setProxyInitializer(null);
 
@@ -22,5 +23,5 @@ class ProjectServiceContainer extends Container
     }
 }
 
-class stdClass_%s extends \stdClass implements \ProxyManager\Proxy\VirtualProxyInterface
+class stdClass_%s extends \stdClass implements \ProxyManager\%s
 {%a}%A

@@ -22,6 +22,7 @@ use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
+use Symfony\Component\Validator\Validation;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
@@ -53,6 +54,11 @@ class FormValidatorTest extends AbstractConstraintValidatorTest
         );
 
         parent::setUp();
+    }
+
+    protected function getApiVersion()
+    {
+        return Validation::API_VERSION_2_5;
     }
 
     protected function createValidator()

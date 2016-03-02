@@ -56,8 +56,7 @@ class SensorController extends Controller
 			$em = $this->getDoctrine()->getManager();
       $sensor = $em->getRepository('GraphBundle:Sensor')->find($sensor_id);
 			$document = new Document();
-			$document->setSensor($sensor);
-			$sensor->addDocument($document);
+			
       $form = $this->createForm('GraphBundle\Form\DocumentType', $document);
 			$form ->add('submit', SubmitType::class, array(
             'label' => 'Create',
@@ -66,7 +65,10 @@ class SensorController extends Controller
 
       if ($form->isSubmitted() && $form->isValid()) {
           $em = $this->getDoctrine()->getManager();
-					
+				
+					$document->setSensor($sensor);
+					$sensor->addDocument($document);
+
           $em->persist($document);
           $em->flush();
 

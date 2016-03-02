@@ -1,19 +1,20 @@
 framework:
     secret: s3cr3t
     default_locale: fr
-    csrf_protection: true
     form:
         csrf_protection:
             field_name: _csrf
     http_method_override: false
     trusted_proxies: ['127.0.0.1', '10.0.0.1']
+    csrf_protection:
+        enabled:    true
     esi:
         enabled: true
     profiler:
         only_exceptions: true
         enabled: false
     router:
-        resource:     %kernel.root_dir%/config/routing.xml
+        resource:     '%kernel.root_dir%/config/routing.xml'
         type:         xml
     session:
         storage_id:      session.storage.native
@@ -36,8 +37,6 @@ framework:
         form:
             resources:    [theme1, theme2]
         hinclude_default_template: global_hinclude_template
-    assets:
-        version: v1
     translator:
         enabled:  true
         fallback: fr
@@ -48,7 +47,7 @@ framework:
     annotations:
         cache:   file
         debug:   true
-        file_cache_dir: %kernel.cache_dir%/annotations
+        file_cache_dir: '%kernel.cache_dir%/annotations'
     serializer:
          enabled:        true
          enable_annotations: true

@@ -143,7 +143,7 @@ class Question
         }
 
         if (null !== $values && !is_array($values)) {
-            if (!$values instanceof \Traversable || $values instanceof \Countable) {
+            if (!$values instanceof \Traversable || !$values instanceof \Countable) {
                 throw new InvalidArgumentException('Autocompleter values can be either an array, `null` or an object implementing both `Countable` and `Traversable` interfaces.');
             }
         }
@@ -164,7 +164,7 @@ class Question
      *
      * @return Question The current instance
      */
-    public function setValidator(callable $validator = null)
+    public function setValidator($validator)
     {
         $this->validator = $validator;
 
@@ -224,7 +224,7 @@ class Question
      *
      * @return Question The current instance
      */
-    public function setNormalizer(callable $normalizer)
+    public function setNormalizer($normalizer)
     {
         $this->normalizer = $normalizer;
 

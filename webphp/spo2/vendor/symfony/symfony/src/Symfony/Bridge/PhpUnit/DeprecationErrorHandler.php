@@ -57,7 +57,7 @@ class DeprecationErrorHandler
                 return \PHPUnit_Util_ErrorHandler::handleError($type, $msg, $file, $line, $context);
             }
 
-            $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS | DEBUG_BACKTRACE_PROVIDE_OBJECT);
+            $trace = debug_backtrace(PHP_VERSION_ID >= 50400 ? DEBUG_BACKTRACE_IGNORE_ARGS | DEBUG_BACKTRACE_PROVIDE_OBJECT : true);
 
             $i = count($trace);
             while (isset($trace[--$i]['class']) && ('ReflectionMethod' === $trace[$i]['class'] || 0 === strpos($trace[$i]['class'], 'PHPUnit_'))) {
@@ -95,7 +95,7 @@ class DeprecationErrorHandler
 
                     exit(1);
                 }
-                if ('legacy' !== $group && self::MODE_WEAK !== $mode) {
+                if ('legacy' !== $group && DeprecationErrorHandler::MODE_WEAK !== $mode) {
                     $ref = &$deprecations[$group][$msg]['count'];
                     ++$ref;
                     $ref = &$deprecations[$group][$msg][$class.'::'.$method];
@@ -161,7 +161,6 @@ class DeprecationErrorHandler
                 if (!empty($notices)) {
                     echo "\n";
                 }
-
                 if (DeprecationErrorHandler::MODE_WEAK !== $mode && $mode < $deprecations['unsilencedCount'] + $deprecations['remainingCount'] + $deprecations['otherCount']) {
                     exit(1);
                 }

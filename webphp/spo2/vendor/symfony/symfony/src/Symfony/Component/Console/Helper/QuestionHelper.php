@@ -56,8 +56,10 @@ class QuestionHelper extends Helper
             return $this->doAsk($output, $question);
         }
 
-        $interviewer = function () use ($output, $question) {
-            return $this->doAsk($output, $question);
+        $that = $this;
+
+        $interviewer = function () use ($output, $question, $that) {
+            return $that->doAsk($output, $question);
         };
 
         return $this->validateAttempts($interviewer, $output, $question);
@@ -102,6 +104,8 @@ class QuestionHelper extends Helper
     /**
      * Asks the question to the user.
      *
+     * This method is public for PHP 5.3 compatibility, it should be private.
+     *
      * @param OutputInterface $output
      * @param Question        $question
      *
@@ -110,7 +114,7 @@ class QuestionHelper extends Helper
      * @throws \Exception
      * @throws \RuntimeException
      */
-    private function doAsk(OutputInterface $output, Question $question)
+    public function doAsk(OutputInterface $output, Question $question)
     {
         $this->writePrompt($output, $question);
 
@@ -130,7 +134,11 @@ class QuestionHelper extends Helper
             }
 
             if (false === $ret) {
-                $ret = $this->readFromInput($inputStream);
+                $ret = fgets($inputStream, 4096);
+                if (false === $ret) {
+                    throw new \RuntimeException('Aborted');
+                }
+                $ret = trim($ret);
             }
         } else {
             $ret = trim($this->autocomplete($output, $question, $inputStream));
@@ -378,7 +386,7 @@ class QuestionHelper extends Helper
      *
      * @throws \Exception In case the max number of attempts has been reached and no valid response has been given
      */
-    private function validateAttempts(callable $interviewer, OutputInterface $output, Question $question)
+    private function validateAttempts($interviewer, OutputInterface $output, Question $question)
     {
         $error = null;
         $attempts = $question->getMaxAttempts();
@@ -421,30 +429,6 @@ class QuestionHelper extends Helper
         }
 
         return self::$shell;
-    }
-
-    /**
-     * Reads user input.
-     *
-     * @param resource $stream The input stream
-     *
-     * @return string User input
-     *
-     * @throws RuntimeException
-     */
-    private function readFromInput($stream)
-    {
-        if (STDIN === $stream && function_exists('readline')) {
-            $ret = readline('');
-        } else {
-            $ret = fgets($stream, 4096);
-        }
-
-        if (false === $ret) {
-            throw new RuntimeException('Aborted');
-        }
-
-        return trim($ret);
     }
 
     /**

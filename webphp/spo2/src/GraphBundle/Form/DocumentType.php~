@@ -28,7 +28,8 @@ class DocumentType extends AbstractType
         															'Accelerometer' => 'accelerometer',
         															 ))
    							 )							
-						->add('name', FileType::class)	
+						->add('name')	
+						 ->add('file')
         ;
     }
     

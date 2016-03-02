@@ -11,13 +11,16 @@
 
 namespace Symfony\Component\Form\ChoiceList\Factory;
 
+use Symfony\Component\Form\ChoiceList\ArrayKeyChoiceList;
 use Symfony\Component\Form\ChoiceList\ArrayChoiceList;
 use Symfony\Component\Form\ChoiceList\ChoiceListInterface;
 use Symfony\Component\Form\ChoiceList\LazyChoiceList;
+use Symfony\Component\Form\ChoiceList\LegacyChoiceListAdapter;
 use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
 use Symfony\Component\Form\ChoiceList\View\ChoiceGroupView;
 use Symfony\Component\Form\ChoiceList\View\ChoiceListView;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
+use Symfony\Component\Form\Extension\Core\View\ChoiceView as LegacyChoiceView;
 
 /**
  * Default implementation of {@link ChoiceListFactoryInterface}.
@@ -36,6 +39,21 @@ class DefaultChoiceListFactory implements ChoiceListFactoryInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Added for backwards compatibility in Symfony 2.7, to be
+     *             removed in Symfony 3.0.
+     */
+    public function createListFromFlippedChoices($choices, $value = null, $triggerDeprecationNotice = true)
+    {
+        if ($triggerDeprecationNotice) {
+            @trigger_error('The '.__METHOD__.' is deprecated since version 2.7 and will be removed in 3.0.', E_USER_DEPRECATED);
+        }
+
+        return new ArrayKeyChoiceList($choices, $value);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function createListFromLoader(ChoiceLoaderInterface $loader, $value = null)
     {
@@ -47,6 +65,23 @@ class DefaultChoiceListFactory implements ChoiceListFactoryInterface
      */
     public function createView(ChoiceListInterface $list, $preferredChoices = null, $label = null, $index = null, $groupBy = null, $attr = null)
     {
+        // Backwards compatibility
+        if ($list instanceof LegacyChoiceListAdapter && empty($preferredChoices)
+            && null === $label && null === $index && null === $groupBy && null === $attr) {
+            $mapToNonLegacyChoiceView = function (LegacyChoiceView &$choiceView) {
+                $choiceView = new ChoiceView($choiceView->data, $choiceView->value, $choiceView->label);
+            };
+
+            $adaptedList = $list->getAdaptedList();
+
+            $remainingViews = $adaptedList->getRemainingViews();
+            $preferredViews = $adaptedList->getPreferredViews();
+            array_walk_recursive($remainingViews, $mapToNonLegacyChoiceView);
+            array_walk_recursive($preferredViews, $mapToNonLegacyChoiceView);
+
+            return new ChoiceListView($remainingViews, $preferredViews);
+        }
+
         $preferredViews = array();
         $otherViews = array();
         $choices = $list->getChoices();
@@ -120,11 +155,21 @@ class DefaultChoiceListFactory implements ChoiceListFactoryInterface
         $key = $keys[$value];
         $nextIndex = is_int($index) ? $index++ : call_user_func($index, $choice, $key, $value);
 
+        // BC normalize label to accept a false value
+        if (null === $label) {
+            // If the labels are null, use the original choice key by default
+            $label = (string) $key;
+        } elseif (false !== $label) {
+            // If "choice_label" is set to false and "expanded" is true, the value false
+            // should be passed on to the "label" option of the checkboxes/radio buttons
+            $dynamicLabel = call_user_func($label, $choice, $key, $value);
+            $label = false === $dynamicLabel ? false : (string) $dynamicLabel;
+        }
+
         $view = new ChoiceView(
             $choice,
             $value,
-            // If the labels are null, use the original choice key by default
-            null === $label ? (string) $key : (string) call_user_func($label, $choice, $key, $value),
+            $label,
             // The attributes may be a callable or a mapping from choice indices
             // to nested arrays
             is_callable($attr) ? call_user_func($attr, $choice, $key, $value) : (isset($attr[$key]) ? $attr[$key] : array())
@@ -211,7 +256,7 @@ class DefaultChoiceListFactory implements ChoiceListFactoryInterface
 
         $groupLabel = (string) $groupLabel;
 
-        // Initialize the group views if necessary. Unnnecessarily built group
+        // Initialize the group views if necessary. Unnecessarily built group
         // views will be cleaned up at the end of createView()
         if (!isset($preferredViews[$groupLabel])) {
             $preferredViews[$groupLabel] = new ChoiceGroupView($groupLabel);

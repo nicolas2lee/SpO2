@@ -41,6 +41,8 @@ class Application extends BaseApplication
 
         parent::__construct('Symfony', Kernel::VERSION.' - '.$kernel->getName().'/'.$kernel->getEnvironment().($kernel->isDebug() ? '/debug' : ''));
 
+        $this->getDefinition()->addOption(new InputOption('--shell', '-s', InputOption::VALUE_NONE, 'Launch the shell.'));
+        $this->getDefinition()->addOption(new InputOption('--process-isolation', null, InputOption::VALUE_NONE, 'Launch commands from shell as a separate process.'));
         $this->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', $kernel->getEnvironment()));
         $this->getDefinition()->addOption(new InputOption('--no-debug', null, InputOption::VALUE_NONE, 'Switches off debug mode.'));
     }
@@ -67,12 +69,6 @@ class Application extends BaseApplication
     {
         $this->kernel->boot();
 
-        if (!$this->commandsRegistered) {
-            $this->registerCommands();
-
-            $this->commandsRegistered = true;
-        }
-
         $container = $this->kernel->getContainer();
 
         foreach ($this->all() as $command) {
@@ -83,11 +79,49 @@ class Application extends BaseApplication
 
         $this->setDispatcher($container->get('event_dispatcher'));
 
+        if (true === $input->hasParameterOption(array('--shell', '-s'))) {
+            @trigger_error('The "--shell" option is deprecated since Symfony 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
+
+            $shell = new Shell($this);
+            $shell->setProcessIsolation($input->hasParameterOption(array('--process-isolation')));
+            $shell->run();
+
+            return 0;
+        }
+
         return parent::doRun($input, $output);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get($name)
+    {
+        $this->registerCommands();
+
+        return parent::get($name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function all($namespace = null)
+    {
+        $this->registerCommands();
+
+        return parent::all($namespace);
     }
 
     protected function registerCommands()
     {
+        if ($this->commandsRegistered) {
+            return;
+        }
+
+        $this->commandsRegistered = true;
+
+        $this->kernel->boot();
+
         $container = $this->kernel->getContainer();
 
         foreach ($this->kernel->getBundles() as $bundle) {
