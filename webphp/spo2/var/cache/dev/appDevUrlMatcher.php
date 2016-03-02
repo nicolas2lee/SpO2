@@ -101,20 +101,34 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
 
         if (0 === strpos($pathinfo, '/graph')) {
-            // chart
-            if (rtrim($pathinfo, '/') === '/graph/chart') {
-                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                    $allow = array_merge($allow, array('GET', 'HEAD'));
-                    goto not_chart;
-                }
+            if (0 === strpos($pathinfo, '/graph/chart')) {
+                // chart
+                if (rtrim($pathinfo, '/') === '/graph/chart') {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_chart;
+                    }
 
-                if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'chart');
-                }
+                    if (substr($pathinfo, -1) !== '/') {
+                        return $this->redirect($pathinfo.'/', 'chart');
+                    }
 
-                return array (  '_controller' => 'GraphBundle\\Controller\\ChartController::indexAction',  '_route' => 'chart',);
+                    return array (  '_controller' => 'GraphBundle\\Controller\\ChartController::indexAction',  '_route' => 'chart',);
+                }
+                not_chart:
+
+                // mchart
+                if ($pathinfo === '/graph/chart/movegraph') {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_mchart;
+                    }
+
+                    return array (  '_controller' => 'GraphBundle\\Controller\\ChartController::moveAction',  '_route' => 'mchart',);
+                }
+                not_mchart:
+
             }
-            not_chart:
 
             // graph_graphentry_index
             if (rtrim($pathinfo, '/') === '/graph') {

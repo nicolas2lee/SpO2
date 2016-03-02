@@ -1,0 +1,103 @@
+{% extends 'layout/layout.html.twig' %}
+{% block title %} Chart | Index{% endblock %}
+
+{% block main_body %}
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+
+<div class="page-wrapper">
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    MoveChart
+                </h1>
+                <ol class="breadcrumb">
+                    <li class="active">
+                        <i class="fa fa-dashboard"></i> moveChart
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+ 
+ 	  		<div id="container" style="width: 650px; height: 500px; margin: 0 auto">
+
+				</div>
+	  </div>
+
+</div>
+
+<script type="text/javascript">
+
+$(function () {
+    $('#container').highcharts({
+        title: {
+            text: 'Movement chart',
+            x: -20 //center
+        },
+        
+        xAxis: {
+            plotBands: [{ // visualize the class
+                from: 0.0,
+                to: 2.5,
+                color: 'rgba(255, 182, 193, .2)'
+            },{
+								from: 2.5,
+                to: 4.5,
+                color: 'rgba(68, 170, 213, .2)'
+						},{
+								from: 4.5,
+                to: 6.5,
+                color: 'rgba(134, 255, 192, .2)'
+						},{
+								from: 6.5,
+                to: 8.5,
+                color: 'rgba(255, 255, 0, .2)'
+						}],
+
+        },
+        yAxis: {
+            title: {
+                text: 'movement'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: '°C'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'Steps',
+            data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+        }, {
+            name: 'class',
+            data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+        }, {
+            name: 'AEE',
+            data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+        }, {
+            name: 'TEE',
+            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+        }]
+    });
+});
+
+</script>
+{% endblock %}
+
+
