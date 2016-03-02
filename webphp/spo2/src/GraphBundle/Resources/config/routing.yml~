@@ -1,0 +1,5 @@
+upload_file
+    path: /uploadfile
+    defaults: {_controller: GraphBundle:Sensor:uploadfileAction}
+    requirements:
+      _methode: POST

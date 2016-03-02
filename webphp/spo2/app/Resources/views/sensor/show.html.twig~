@@ -1,40 +1,46 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout/layout.html.twig' %}
+{% block title %}
+<title>Sensor | Show</title>
+{% endblock %}
+{% block main_body %}
+ <div class="page-wrapper">
 
-{% block body %}
-    <h1>Sensor</h1>
+    <div class="container-fluid">
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ sensor.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ sensor.name }}</td>
-            </tr>
-            <tr>
-                <th>Type</th>
-                <td>{{ sensor.type }}</td>
-            </tr>
-            <tr>
-                <th>User_id</th>
-                <td>{{ sensor.userid }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    Sensor
+                </h1>
+                <ol class="breadcrumb">
+                    <li>
+                        <i class="fa fa-dashboard"></i>  <a href="index.html">Dashboard</a>
+                    </li>
+                    <li class="active">
+                        <i class="fa fa-edit"></i> Forms
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+				<div class= "row">
+			
+				Sensor Name {{sensor.name}}
+				<br />
+				Sensor Type {{sensor.type}}
+				<div>uploaded files</div>
+				{% for doc in documents %}
+					{{doc.type}}
+				{% endfor%}
+				</div>
+       	
 
-    <ul>
-        <li>
-            <a href="{{ path('sensor_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('sensor_edit', { 'id': sensor.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+<!-- /#page-wrapper -->
+
+
 {% endblock %}

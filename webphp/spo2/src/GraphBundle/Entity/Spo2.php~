@@ -40,5 +40,52 @@ class Spo2
     {
         return $this->id;
     }
-}
 
+    /**
+     * Set saturation
+     *
+     * @param string $saturation
+     *
+     * @return Spo2
+     */
+    public function setSaturation($saturation)
+    {
+        $this->saturation = $saturation;
+
+        return $this;
+    }
+
+    /**
+     * Get saturation
+     *
+     * @return string
+     */
+    public function getSaturation()
+    {
+        return $this->saturation;
+    }
+
+    /**
+     * Set datetime
+     *
+     * @param string $datetime
+     *
+     * @return Spo2
+     */
+    public function setDatetime($datetime)
+    {
+        $this->datetime = $datetime;
+
+        return $this;
+    }
+
+    /**
+     * Get datetime
+     *
+     * @return string
+     */
+    public function getDatetime()
+    {
+        return $this->datetime;
+    }
+}

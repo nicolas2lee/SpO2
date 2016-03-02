@@ -3,11 +3,18 @@
 namespace GraphBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
 use GraphBundle\Entity\Sensor;
+use GraphBundle\Entity\Document;
+
+
 use GraphBundle\Form\SensorType;
+use GraphBundle\Form\DocumentType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
@@ -27,14 +34,52 @@ class SensorController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $sensors = $em->getRepository('GraphBundle:Sensor')->findAll();
+			
+			
+			
 
-       /* return $this->render('sensor/index.html.twig', array(
+        return $this->render('sensor/index.html.twig', array(
             'sensors' => $sensors,
-        ));*/
-				return $this->render('sensor/index.html.twig');
+						'nbSensors' => 2,
+						
+        ));
     }
+
+
+		/**
+     *
+     * @Route("/{sensor_id}/uploadfile", name="sensor_uploadfile")
+     * @Method({"GET", "POST"})
+     */
+		public function uploadfileAction(Request $request, $sensor_id){
+			$em = $this->getDoctrine()->getManager();
+      $sensor = $em->getRepository('GraphBundle:Sensor')->find($sensor_id);
+			$document = new Document();
+			$document->setSensor($sensor);
+			$sensor->addDocument($document);
+      $form = $this->createForm('GraphBundle\Form\DocumentType', $document);
+			$form ->add('submit', SubmitType::class, array(
+            'label' => 'Create',
+      ));
+      $form->handleRequest($request);
+
+      if ($form->isSubmitted() && $form->isValid()) {
+          $em = $this->getDoctrine()->getManager();
+					
+          $em->persist($document);
+          $em->flush();
+
+          return $this->redirectToRoute('sensor_show', array('id' => $sensor->getId()));
+      }
+
+      return $this->render('UploadFile/upload.html.twig', array(
+          'document' => $document,
+          'form' => $form->createView(),
+					'sensor' => $sensor
+      ));
+		}
+
 
     /**
      * Creates a new Sensor entity.
@@ -74,11 +119,17 @@ class SensorController extends Controller
      */
     public function showAction(Sensor $sensor)
     {
+				
+				
+				
+				$documents=$sensor->getDocuments();
+      	
         $deleteForm = $this->createDeleteForm($sensor);
 
         return $this->render('sensor/show.html.twig', array(
             'sensor' => $sensor,
             'delete_form' => $deleteForm->createView(),
+						'documents' => $documents,
         ));
     }
 

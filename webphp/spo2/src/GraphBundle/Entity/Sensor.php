@@ -3,6 +3,7 @@
 namespace GraphBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Sensor
@@ -36,6 +37,15 @@ class Sensor
    */
     private $user_id;
 
+		/**
+     * @ORM\OneToMany(targetEntity="Document", mappedBy="sensor")
+     */
+		protected $documents;
+
+		public function __construct()
+    {
+        $this->documents = new ArrayCollection();
+    }
     /**
      * Get id
      *
@@ -116,5 +126,39 @@ class Sensor
     public function getUserId()
     {
         return $this->user_id;
+    }
+
+    /**
+     * Add document
+     *
+     * @param \GraphBundle\Entity\Document $document
+     *
+     * @return Sensor
+     */
+    public function addDocument(\GraphBundle\Entity\Document $document)
+    {
+        $this->documents[] = $document;
+
+        return $this;
+    }
+
+    /**
+     * Remove document
+     *
+     * @param \GraphBundle\Entity\Document $document
+     */
+    public function removeDocument(\GraphBundle\Entity\Document $document)
+    {
+        $this->documents->removeElement($document);
+    }
+
+    /**
+     * Get documents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDocuments()
+    {
+        return $this->documents;
     }
 }
