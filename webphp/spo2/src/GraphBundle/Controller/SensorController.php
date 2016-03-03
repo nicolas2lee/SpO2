@@ -10,12 +10,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use GraphBundle\Entity\Sensor;
 use GraphBundle\Entity\Document;
+use GraphBundle\Entity\Movement;
 
 
 use GraphBundle\Form\SensorType;
 use GraphBundle\Form\DocumentType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
+
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Filesystem;
 
 
 /**
@@ -36,9 +41,6 @@ class SensorController extends Controller
         $em = $this->getDoctrine()->getManager();
         $sensors = $em->getRepository('GraphBundle:Sensor')->findAll();
 			
-			
-			
-
         return $this->render('sensor/index.html.twig', array(
             'sensors' => $sensors,
 						'nbSensors' => 2,
@@ -63,6 +65,7 @@ class SensorController extends Controller
       ));
       $form->handleRequest($request);
 
+
       if ($form->isSubmitted() && $form->isValid()) {
           $em = $this->getDoctrine()->getManager();
 				
@@ -71,8 +74,43 @@ class SensorController extends Controller
 
           $em->persist($document);
           $em->flush();
+					//$myfile = fopen("webdictionary.txt", "r") or die("Unable to open file!");
+					//$contents = file_get_contents($document->getWebPath());
+					$myfile = fopen($document->getWebPath(), "r");
+					if($myfile){
+							while(($line=fgets($myfile))!== false){
+								$args=	array_map('trim', explode(';', $line));
+								if ($args[0]!="\"results_id\""){
+										
+										$movement = new Movement();
+				//	"results_id";"start";"duration";"class";"steps";"mi";"aee";"tee";"met";"vmu"
+				//       0            1      2         3      4       5     6    7     8     9
+										$movement->setTstart(str_replace('"','',$args[1]));
+										$movement->setDuration($args[2]);
+										$movement->setClass(str_replace('"','',$args[3]));
+										$movement->setNbSteps($args[4]);
+										$movement->setMI($args[5]);
+										$movement->setAEE($args[6]);
+										$movement->setTEE($args[7]);
+										$movement->setMET($args[8]);
+										$movement->setVMU($args[9]);
 
-          return $this->redirectToRoute('sensor_show', array('id' => $sensor->getId()));
+										$em->persist($movement);
+         						$em->flush();
+								}
+							}
+							fclose($myfile);
+					}else{}
+
+					return $this->render('UploadFile/test.html.twig', array(		    
+							'line' => $args
+					));
+					
+					//$data = $this->chargeData($document);
+          return $this->redirectToRoute('sensor_show', 
+					array('id' => $sensor->getId(),
+								
+					));
       }
 
       return $this->render('UploadFile/upload.html.twig', array(
@@ -121,9 +159,7 @@ class SensorController extends Controller
      */
     public function showAction(Sensor $sensor)
     {
-				
-				
-				
+
 				$documents=$sensor->getDocuments();
       	
         $deleteForm = $this->createDeleteForm($sensor);
@@ -132,6 +168,7 @@ class SensorController extends Controller
             'sensor' => $sensor,
             'delete_form' => $deleteForm->createView(),
 						'documents' => $documents,
+						//'content' => "",
         ));
     }
 
@@ -197,4 +234,14 @@ class SensorController extends Controller
             ->getForm()
         ;
     }
+	
+		private function chargeData(Document $document){
+				return	$document->getData();	
+				
+		}
+
+
+
+
+
 }

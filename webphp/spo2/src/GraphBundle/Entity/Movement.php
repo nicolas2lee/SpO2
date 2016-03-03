@@ -49,6 +49,11 @@ class Movement
 		/**
     * @ORM\Column(type="string")
     */
+		private $MET; 
+
+		/**
+    * @ORM\Column(type="string")
+    */
 		private $VMU; #Activity Score
 
 		/**
@@ -262,5 +267,29 @@ class Movement
     public function getDuration()
     {
         return $this->duration;
+    }
+
+    /**
+     * Set mET
+     *
+     * @param string $mET
+     *
+     * @return Movement
+     */
+    public function setMET($mET)
+    {
+        $this->MET = $mET;
+
+        return $this;
+    }
+
+    /**
+     * Get mET
+     *
+     * @return string
+     */
+    public function getMET()
+    {
+        return $this->MET;
     }
 }

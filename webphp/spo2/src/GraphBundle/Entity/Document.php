@@ -149,11 +149,11 @@ class Document
         // if there is an error when moving the file, an exception will
         // be automatically thrown by move(). This will properly prevent
         // the entity from being persisted to the database on error
-        //$this->getFile()->move($this->getUploadRootDir(), $this->path);
-				$this->getFile()->move(
-            $this->getUploadRootDir(),
-            $this->id.'.'.$this->getFile()->guessExtension()
-        );
+        $this->getFile()->move($this->getUploadRootDir(), $this->path);
+				//$this->getFile()->move(
+        //    $this->getUploadRootDir(),
+        //    $this->id.'.'.$this->getFile()->guessExtension()
+        //);
 
         // check if we have an old image
         if (isset($this->temp)) {

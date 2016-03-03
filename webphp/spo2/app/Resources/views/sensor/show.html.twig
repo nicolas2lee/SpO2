@@ -31,10 +31,14 @@
 				Sensor Type {{sensor.type}}
 				<div>uploaded files</div>
 				{% for doc in documents %}
-					{{doc.type}}
-					{{doc.name}}
-					{{doc.path}}
+					{{doc.type}}<br />
+					{{doc.name}}<br />
+					{{doc.path}}<br />
+					{{doc.getWebPath()}}
+					<h3>content is<br /></h3>
+					
 				{% endfor%}
+			
 				</div>
        	
 

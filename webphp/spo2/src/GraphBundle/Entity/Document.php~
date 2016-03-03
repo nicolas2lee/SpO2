@@ -82,7 +82,7 @@ class Document
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+        return __DIR__.'/../../../web/'.$this->getUploadDir();
     }
 
     protected function getUploadDir()
@@ -131,7 +131,7 @@ class Document
     {
         if (null !== $this->getFile()) {
             // do whatever you want to generate a unique name
-            $filename = sha1(uniqid(mt_rand(), true));
+            $filename = $this->id;
             $this->path = $filename.'.'.$this->getFile()->guessExtension();
         }
     }

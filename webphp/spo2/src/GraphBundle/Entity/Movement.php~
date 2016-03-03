@@ -49,6 +49,11 @@ class Movement
 		/**
     * @ORM\Column(type="string")
     */
+		private $MET; 
+
+		/**
+    * @ORM\Column(type="string")
+    */
 		private $VMU; #Activity Score
 
 		/**
