@@ -15,23 +15,28 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">
-                    AreaChart <small>SpO2</small>
+                    SpO2Chart 
                 </h1>
                 <ol class="breadcrumb">
                     <li class="active">
-                        <i class="fa fa-dashboard"></i> SpO2 Chart
+                        <i class="fa fa-dashboard"></i> Enter seuil in the box: <BR>
+													 	<FORM NAME="myform" ACTION="" METHOD="GET">
+																<INPUT TYPE="text" NAME="inputbox" VALUE=""><P>
+																<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilManual(this.form)">
+														</FORM>
                     </li>
                 </ol>
             </div>
         </div>
         <!-- /.row -->
  
- 	  		<div id="container" style="width: 650px; height: 500px; margin: 0 auto"></div>
+ 	  		<div id="container" style="width: 650px; height: 500px; margin: 0 auto">
+
+				</div>
 	  </div>
 
 </div>
 
- <!--script language="JavaScript"-->
 <script type="text/javascript">
 
 $(function () {
@@ -99,7 +104,7 @@ $(function () {
         },{
             name: 'seuil',
 						type: 'spline',
-            data: genSeuil(92),
+            data: [],
 						color : "#FF0000"
         }]
 
@@ -117,6 +122,28 @@ function genNumber(){
 	return list;
 }
 
+//generate serie of seuil manual
+function genSeuilManual(form) {
+    var TestVar = form.inputbox.value;
+ 		var s= Number(TestVar);
+		list=[];
+		n = 0;
+		while ( n <= 10){
+			list.push(s); 
+			n++;		
+		}
+
+		var chart = $('#container').highcharts();
+        chart.series[1].setData(list);
+}
+/*
+function getSeuilManual(){
+
+	var s = prompt("Entree chiffre de seuil :")
+  var seuil = Number(s);
+	return seuil;
+}
+
 function genSeuil(s){
 	list=[];
   n = 0;
@@ -125,7 +152,8 @@ function genSeuil(s){
 		n++;		
 	}
 	return list;
-}
+}*/
+
 </script>
 {% endblock %}
 

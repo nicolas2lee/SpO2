@@ -25,4 +25,14 @@ class ChartController extends Controller
 				return $this->render('chart/index.html.twig');
     }
 
+		/**
+     *
+     * @Route("/movegraph", name="mchart")
+     * @Method("GET")
+     */
+    public function moveAction()
+    {
+
+				return $this->render('mchart/index.html.twig');
+    }
 }
