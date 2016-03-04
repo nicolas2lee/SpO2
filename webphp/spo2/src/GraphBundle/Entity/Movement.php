@@ -24,7 +24,7 @@ class Movement
 		/**
     * @ORM\Column(type="integer")
     */
-		private $nb_steps;
+		private $nbSteps;
 
 		/**
     * @ORM\Column(type="string")
@@ -66,6 +66,12 @@ class Movement
     */
 		private $duration;
 
+		/**
+     * @ORM\ManyToOne(targetEntity="Sensor", inversedBy="movements")
+     * @ORM\JoinColumn(name="sensor_id", referencedColumnName="id")
+     */
+		protected $sensor;
+
 
     /**
      * Get id
@@ -86,7 +92,7 @@ class Movement
      */
     public function setNbSteps($nbSteps)
     {
-        $this->nb_steps = $nbSteps;
+        $this->nbSteps = $nbSteps;
 
         return $this;
     }
@@ -98,7 +104,7 @@ class Movement
      */
     public function getNbSteps()
     {
-        return $this->nb_steps;
+        return $this->nbSteps;
     }
 
     /**
@@ -291,5 +297,29 @@ class Movement
     public function getMET()
     {
         return $this->MET;
+    }
+
+    /**
+     * Set sensor
+     *
+     * @param \GraphBundle\Entity\Sensor $sensor
+     *
+     * @return Movement
+     */
+    public function setSensor(\GraphBundle\Entity\Sensor $sensor = null)
+    {
+        $this->sensor = $sensor;
+
+        return $this;
+    }
+
+    /**
+     * Get sensor
+     *
+     * @return \GraphBundle\Entity\Sensor
+     */
+    public function getSensor()
+    {
+        return $this->sensor;
     }
 }

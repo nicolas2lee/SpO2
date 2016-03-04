@@ -70,7 +70,7 @@ class SensorController extends Controller
           $em = $this->getDoctrine()->getManager();
 				
 					$document->setSensor($sensor);
-					$sensor->addDocument($document);
+					//$sensor->addDocument($document);
 
           $em->persist($document);
           $em->flush();
@@ -94,6 +94,7 @@ class SensorController extends Controller
 										$movement->setTEE($args[7]);
 										$movement->setMET($args[8]);
 										$movement->setVMU($args[9]);
+										$movement->setSensor($sensor);
 
 										$em->persist($movement);
          						$em->flush();

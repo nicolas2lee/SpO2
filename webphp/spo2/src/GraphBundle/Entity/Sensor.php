@@ -42,6 +42,11 @@ class Sensor
      */
 		protected $documents;
 
+		/**
+     * @ORM\OneToMany(targetEntity="Movement", mappedBy="sensor")
+     */
+		protected $movements;
+
 		public function __construct()
     {
         $this->documents = new ArrayCollection();
@@ -160,5 +165,39 @@ class Sensor
     public function getDocuments()
     {
         return $this->documents;
+    }
+
+    /**
+     * Add movement
+     *
+     * @param \GraphBundle\Entity\Movement $movement
+     *
+     * @return Sensor
+     */
+    public function addMovement(\GraphBundle\Entity\Movement $movement)
+    {
+        $this->movements[] = $movement;
+
+        return $this;
+    }
+
+    /**
+     * Remove movement
+     *
+     * @param \GraphBundle\Entity\Movement $movement
+     */
+    public function removeMovement(\GraphBundle\Entity\Movement $movement)
+    {
+        $this->movements->removeElement($movement);
+    }
+
+    /**
+     * Get movements
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMovements()
+    {
+        return $this->movements;
     }
 }
