@@ -25,12 +25,14 @@
   </div>
 	<!-- /.row -->
 	 <div class="row">
-		{{sensor.name}}
+		Uploading data file for Sensor {{sensor.name}}
 		<div class="col-lg-6">
 			{{ form_start(form) }}
 				{{ form_widget(form)}}
 			{{ form_end(form) }}
+			<br /><br /><br /><br />
 		</div>
+		
 	 </div>
 	</div>
 </div>
