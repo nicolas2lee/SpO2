@@ -51,3 +51,5 @@ swiftmailer:
 
 vich_uploader:
     db_driver: orm # or mongodb or propel or phpcr
+
+
