@@ -29,7 +29,7 @@
 				{{sensor.name}}
 	
 				</div>
- 	  		<div id="container" style="width: 1000px; height: 700px; margin: 0 auto">
+ 	  		<div id="container" style="width: 1000px; height: 600px; margin: 0 auto">
 
 				</div>
 	  </div>
@@ -92,7 +92,7 @@ $(function () {
             }]
         },
         tooltip: {
-            valueSuffix: '°C'
+            valueSuffix: ''
         },
         legend: {
             layout: 'vertical',

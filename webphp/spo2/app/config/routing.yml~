@@ -1,7 +1,7 @@
 graph:
     resource: "@GraphBundle/Controller/"
     type:     annotation
-    prefix:   /
+    prefix:   /graph
 
 
 

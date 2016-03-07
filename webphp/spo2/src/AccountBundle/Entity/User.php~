@@ -3,23 +3,22 @@
 namespace AccountBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User as BaseUser;
 
 /**
  * User
  *
- * @ORM\Table(name="user")
+ * @ORM\Table(name="fos_user")
  * @ORM\Entity(repositoryClass="AccountBundle\Repository\UserRepository")
  */
-class User
+class User extends BaseUser
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
 	 /**
    * @ORM\Column(type="string", length=100)
@@ -50,6 +49,12 @@ class User
 		public function setPassword($password)
     {
         return $password->username = $password;
+    }
+
+		public function __construct()
+    {
+        parent::__construct();
+        // your own logic
     }
 
 		

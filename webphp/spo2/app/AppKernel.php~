@@ -19,6 +19,7 @@ class AppKernel extends Kernel
 #						new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new AccountBundle\AccountBundle(),
             new GraphBundle\GraphBundle(),
+						new Vich\UploaderBundle\VichUploaderBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
