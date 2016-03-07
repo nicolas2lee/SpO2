@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
+use GraphBundle\Entity\Sensor;
+
 /**
  * Chart controller.
  *
@@ -27,12 +29,18 @@ class ChartController extends Controller
 
 		/**
      *
-     * @Route("/movegraph", name="mchart")
+     * @Route("/{sensor_id}/movegraph", name="mchart")
      * @Method("GET")
      */
-    public function moveAction()
+    public function moveAction($sensor_id)
     {
+				$em = $this->getDoctrine()->getManager();
+				$sensor = $em->getRepository('GraphBundle:Sensor')->find($sensor_id);
+				$movements = $sensor->getMovements();
 
-				return $this->render('mchart/index.html.twig');
+				return $this->render('mchart/index.html.twig', array(
+						'sensor' => $sensor,
+						'movements' => $movements,
+				));
     }
 }
