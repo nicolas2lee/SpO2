@@ -42,25 +42,42 @@ var AEE=[];
 var TEE=[];
 var MET=[];
 var VMU=[];
-function seprateData(){
-	
-	{% for mov  in movements %}
-			nbSteps.push({{mov.nbSteps}})
-			AEE.push({{mov.AEE}})
-			TEE.push({{mov.TEE}})
-			MET.push({{mov.MET}})
-	{% endfor %}
+var tstart=[];
+
+function toJSDate (dateTime) {
+	var dateTime = dateTime.split(" ");//dateTime[0] = date, dateTime[1] = time
+	var date = dateTime[0].split("-");
+	var time = dateTime[1].split(":");
+	var ms = time[2].split(".");
+	//(year, month, day, hours, minutes, seconds, milliseconds)
+	return Date.UTC(date[0], date[1], date[2], time[0], time[1], ms[0], ms[1]);
 
 }
 
+function seperateData(){
+	
+	{% for mov in movements %}
+			var str="{{mov.tstart}}";
+			starttime = toJSDate(str);
+			duration.push({{mov.duration}});
+			nbSteps.push([starttime, {{mov.nbSteps}}]);
+			AEE.push([starttime, {{mov.AEE}}]);
+			TEE.push([starttime, {{mov.TEE}}]);		
+			MET.push([starttime, {{mov.MET}}]);
+	{% endfor %}
+	alert(nbSteps[0])
+}
+
 $(function () {
-		seprateData();
+		seperateData();
     $('#container').highcharts({
+				chart: {
+						zoomType: 'x'
+				},
         title: {
             text: 'Movement chart',
             x: -20 //center
         },
-        
         xAxis: {
             plotBands: [{ // visualize the class
                 from: 0.0,
@@ -79,6 +96,19 @@ $(function () {
                 to: 12.5,
                 color: 'rgba(255, 255, 0, .2)'
 						}],
+						type: 'datetime',
+						dateTimeLabelFormats:{
+							millisecond: '%H:%M:%S.%L',
+							second: '%H:%M:%S',
+							minute: '%H:%M',
+							hour: '%H:%M',
+							day: '%e. %b',
+							week: '%e. %b',
+							month: '%b \'%y',
+							year: '%Y'
+						}
+						
+						//tickPositions: tstart
 
         },
         yAxis: {
@@ -102,19 +132,24 @@ $(function () {
         },
         series: [{
             name: 'Steps',
-            data: nbSteps
+            data: nbSteps,
+						step: true
         }, {
             name: 'AEE',
-            data: AEE
+            data: AEE,
+						step: true
         }, {
             name: 'TEE',
-            data: TEE
+            data: TEE,
+						step: true
         }, {
             name: 'MET',
-            data: MET
+            data: MET,
+						step: true
         },{
             name: 'VMU',
-            data: VMU
+            data: VMU,
+						step: true
         }]
     });
 });
