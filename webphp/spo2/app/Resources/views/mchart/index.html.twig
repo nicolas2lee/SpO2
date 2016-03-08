@@ -5,6 +5,8 @@
 <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
+<!--script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script-->
 
 
 <div class="page-wrapper">
@@ -43,6 +45,7 @@ var TEE=[];
 var MET=[];
 var VMU=[];
 var tstart=[];
+var moveclass=[]
 
 function toJSDate (dateTime) {
 	var dateTime = dateTime.split(" ");//dateTime[0] = date, dateTime[1] = time
@@ -59,42 +62,110 @@ function seperateData(){
 	{% for mov in movements %}
 			var str="{{mov.tstart}}";
 			starttime = toJSDate(str);
-			duration.push({{mov.duration}});
+		//	duration.push({{mov.duration}});
+			tstart.push(starttime)
 			nbSteps.push([starttime, {{mov.nbSteps}}]);
 			AEE.push([starttime, {{mov.AEE}}]);
 			TEE.push([starttime, {{mov.TEE}}]);		
 			MET.push([starttime, {{mov.MET}}]);
+			moveclass.push("{{mov.class}}");
 	{% endfor %}
+}
+
+function genClass(){
+		var res=[];
+		for (i=0; i < moveclass.length;i++)
+				if (i!=moveclass.length-1){
+					switch (moveclass[i]){
+							case "standing":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(255, 51, 255, .5)'})
+								break;
+							case "sitting":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(255, 102, 255, .5)'})
+								break;
+							case "lying":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(255, 153, 255, .5)'})
+								break;
+							case "shuffling":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(204, 0, 204, .5)'})
+								break;
+							case "walking":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(102, 0, 102, .5)'})
+								break;
+							default:
+								break
+					}
+				}
+		return res;
+		
 }
 
 $(function () {
 		seperateData();
     $('#container').highcharts({
+
 				chart: {
 						zoomType: 'x'
 				},
+
+/*
+			 rangeSelector: {
+					allButtonsEnabled: true,
+          buttons: [{
+              type: 'second',
+              count: 1,
+              text: '1s'
+          },{
+							type: 'minute',
+							count: 1,
+							text: '1m'
+					}, {
+							type: 'hour',
+							count: 1,
+							text: '1h'
+					}, {
+							type: 'day',
+							count: 1,
+							text: '1d'
+					}, {
+              type: 'all',
+              text: 'All'
+          }],
+
+          buttonTheme: {
+              width: 50
+          },
+          inputDateFormat: '%H:%M:%S.%L',
+          inputEditDateFormat: '%H:%M:%S.%L',
+					inputDateParser:function (value) {
+                value = value.split(/[:\.]/);
+                return Date.UTC(
+                    1970,
+                    0,
+                    1,
+                    parseInt(value[0], 10),
+                    parseInt(value[1], 10),
+                    parseInt(value[2], 10),
+                    parseInt(value[3], 10)
+                );
+            }
+													
+				},
+*/
         title: {
             text: 'Movement chart',
             x: -20 //center
         },
         xAxis: {
-            plotBands: [{ // visualize the class
-                from: 0.0,
-                to: 4.5,
-                color: 'rgba(255, 182, 193, .2)'
-            },{
-								from: 4.5,
+
+						// visualize the class 
+						 /*plotBands: [{ // visualize the weekend
+                from: 4.5,
                 to: 6.5,
                 color: 'rgba(68, 170, 213, .2)'
-						},{
-								from: 6.5,
-                to: 9.5,
-                color: 'rgba(134, 255, 192, .2)'
-						},{
-								from: 9.5,
-                to: 12.5,
-                color: 'rgba(255, 255, 0, .2)'
-						}],
+            }]*/
+            plotBands: genClass(),
+
 						type: 'datetime',
 						dateTimeLabelFormats:{
 							millisecond: '%H:%M:%S.%L',
