@@ -18,13 +18,15 @@ class ChartController extends Controller
 {
 		/**
      *
-     * @Route("/", name="chart")
+     * @Route("/{sensor_id}/spo2", name="spo2chart")
      * @Method("GET")
      */
-    public function indexAction()
+    public function spo2Action($sensor_id)
     {
-
-				return $this->render('chart/index.html.twig');
+				$em = $this->getDoctrine()->getManager();
+				$sensor = $em->getRepository('GraphBundle:Sensor')->find($sensor_id);
+				$spo2s = $sensor->getSpo2s();
+				return $this->render('chart/index.html.twig', array('sensor'=>$sensor, 'spo2s' => $spo2s));
     }
 
 		/**
@@ -36,9 +38,28 @@ class ChartController extends Controller
     {
 				$em = $this->getDoctrine()->getManager();
 				$sensor = $em->getRepository('GraphBundle:Sensor')->find($sensor_id);
+			//	if ($sensor->getType()==)
 				$movements = $sensor->getMovements();
 
 				return $this->render('mchart/index.html.twig', array(
+						'sensor' => $sensor,
+						'movements' => $movements,
+				));
+    }
+
+		/**
+     *
+     * @Route("/{sensor_id}/syncgraph", name="syncchart")
+     * @Method("GET")
+     */
+    public function syncAction($sensor_id)
+    {
+				$em = $this->getDoctrine()->getManager();
+				$sensor = $em->getRepository('GraphBundle:Sensor')->find($sensor_id);
+			//	if ($sensor->getType()==)
+				$movements = $sensor->getMovements();
+
+				return $this->render('syncchart/index.html.twig', array(
 						'sensor' => $sensor,
 						'movements' => $movements,
 				));

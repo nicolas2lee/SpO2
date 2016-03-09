@@ -1,0 +1,262 @@
+{% extends 'layout/layout.html.twig' %}
+{% block title %} 
+<title>Chart | Synchronize Chart</title>
+{% endblock %}
+
+{% block main_body %}
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<!--script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script-->
+
+<!--datetimepicker-->
+
+
+
+
+
+<div class="page-wrapper">
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    SpO2&Movement Chart
+                </h1>
+                <ol class="breadcrumb">
+                    <li class="active">
+                        <i class="fa fa-dashboard"></i> moveChart <BR>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+<table>
+<tr>
+	<td>
+	</td>
+	<td>
+			<!--div class="col-lg-6"-->
+				Enter threshold of MI in the box: &nbsp;
+			 	<FORM NAME="myform" ACTION="" METHOD="GET">
+						<INPUT TYPE="text" NAME="inputbox" VALUE=""><P>
+						<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilMI(this.form)">
+				</FORM> 
+			<!--/div>
+			<div class="col-lg-6"-->
+	</td>
+
+	<td>
+				Enter threshold of VMU in the box: 
+				<FORM NAME="myform" ACTION="" METHOD="GET">
+						<INPUT TYPE="text" NAME="inputbox" VALUE=""><P>
+						<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilVMU(this.form)">
+				</FORM>
+			<!--/div-->
+	</td>
+	<td>
+
+		
+	</td>
+</tr>
+</table>
+
+ 	  		<div id="container" style="width: 1000px; height: 600px; margin: 0 auto">
+
+				</div>
+				<br /><br /><br /><br />
+	  </div>
+
+</div>
+
+<script type="text/javascript">
+var nbSteps=[];
+var AEE=[];
+var TEE=[];
+var MET=[];
+var VMU=[];
+var MI=[];
+var tstart=[];
+var moveclass=[]
+
+function toJSDate (dateTime) {
+	var dateTime = dateTime.split(" ");//dateTime[0] = date, dateTime[1] = time
+	var date = dateTime[0].split("-");
+	var time = dateTime[1].split(":");
+	var ms = time[2].split(".");
+	//(year, month, day, hours, minutes, seconds, milliseconds)
+	return Date.UTC(date[0], date[1], date[2], time[0], time[1], ms[0], ms[1]);
+
+}
+
+function seperateData(){
+	
+	{% for mov in movements %}
+			var str="{{mov.tstart}}";
+			starttime = toJSDate(str);
+		//	duration.push({{mov.duration}});
+			tstart.push(starttime);
+			nbSteps.push([starttime, {{mov.nbSteps}}]);
+			AEE.push([starttime, {{mov.AEE}}]);
+			TEE.push([starttime, {{mov.TEE}}]);		
+			MET.push([starttime, {{mov.MET}}]);
+			MI.push([starttime, {{mov.MI}}]);
+			moveclass.push("{{mov.class}}");
+	{% endfor %}
+}
+
+function genClass(){
+		var res=[];
+		for (i=0; i < moveclass.length;i++)
+				if (i!=moveclass.length-1){
+					switch (moveclass[i]){
+							case "standing":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(255, 51, 255, .5)'})
+								break;
+							case "sitting":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(255, 102, 255, .5)'})
+								break;
+							case "lying":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(255, 153, 255, .5)'})
+								break;
+							case "shuffling":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(204, 0, 204, .5)'})
+								break;
+							case "walking":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(102, 0, 102, .5)'})
+								break;
+							default:
+								break
+					}
+				}
+		return res;
+		
+}
+
+function genSeuilMI(form) {
+    var TestVar = form.inputbox.value;
+		//alert(TestVar);
+ 		var s= Number(TestVar);
+		list=[];
+		var n = 0;
+		while ( n <= MET.length){
+			list.push([tstart[n],s]); 
+			n++;		
+		}
+		//alert(list.length);
+		var chart = $('#container').highcharts();
+        chart.series[6].setData(list);
+}
+
+function genSeuilVMU(form) {
+    var TestVar = form.inputbox.value;
+		//alert(TestVar);
+ 		var s= Number(TestVar);
+		list=[];
+		var n = 0;
+		while ( n <= MET.length){
+			list.push([tstart[n],s]); 
+			n++;		
+		}
+		//alert(list.length);
+		var chart = $('#container').highcharts();
+        chart.series[7].setData(list);
+}
+
+
+$(function () {
+		seperateData();
+    $('#container').highcharts({
+
+				chart: {
+						zoomType: 'x'
+				},
+				
+        title: {
+            text: 'Movement chart',
+            x: -20 //center
+        },
+        xAxis: {
+
+						// visualize the class 
+            plotBands: genClass(),
+
+						type: 'datetime',
+						dateTimeLabelFormats:{
+							millisecond: '%H:%M:%S.%L',
+							second: '%H:%M:%S',
+							minute: '%H:%M',
+							hour: '%H:%M',
+							day: '%e. %b',
+							week: '%e. %b',
+							month: '%b \'%y',
+							year: '%Y'
+						}
+						
+						//tickPositions: tstart
+
+        },
+        yAxis: {
+            title: {
+                text: 'movement'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: ''
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'Steps',
+            data: nbSteps,
+						step: true
+        }, {
+            name: 'AEE',
+            data: AEE,
+						step: true
+        }, {
+            name: 'TEE',
+            data: TEE,
+						step: true
+        }, {
+            name: 'MET',
+            data: MET,
+						step: true
+        },{
+            name: 'VMU',
+            data: VMU,
+						step: true
+        },{
+            name: 'MI',
+            data: MI,
+						step: true
+        },{
+            name: 'threshold of MI',
+						type: 'spline',
+            data: [],
+						color : "#FF0000"
+        },{
+            name: 'threshold of VMU',
+						type: 'spline',
+            data: [],
+						color : "#E9F01D"
+        }]
+    });
+});
+
+</script>
+{% endblock %}
+
+

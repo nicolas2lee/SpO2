@@ -47,6 +47,11 @@ class Sensor
      */
 		protected $movements;
 
+		/**
+     * @ORM\OneToMany(targetEntity="Spo2", mappedBy="sensor")
+     */
+		protected $spo2s;
+
 		public function __construct()
     {
         $this->documents = new ArrayCollection();

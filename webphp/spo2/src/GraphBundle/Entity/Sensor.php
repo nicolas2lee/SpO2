@@ -47,6 +47,11 @@ class Sensor
      */
 		protected $movements;
 
+		/**
+     * @ORM\OneToMany(targetEntity="Spo2", mappedBy="sensor")
+     */
+		protected $spo2s;
+
 		public function __construct()
     {
         $this->documents = new ArrayCollection();
@@ -199,5 +204,39 @@ class Sensor
     public function getMovements()
     {
         return $this->movements;
+    }
+
+    /**
+     * Add spo2
+     *
+     * @param \GraphBundle\Entity\Spo2 $spo2
+     *
+     * @return Sensor
+     */
+    public function addSpo2(\GraphBundle\Entity\Spo2 $spo2)
+    {
+        $this->spo2s[] = $spo2;
+
+        return $this;
+    }
+
+    /**
+     * Remove spo2
+     *
+     * @param \GraphBundle\Entity\Spo2 $spo2
+     */
+    public function removeSpo2(\GraphBundle\Entity\Spo2 $spo2)
+    {
+        $this->spo2s->removeElement($spo2);
+    }
+
+    /**
+     * Get spo2s
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSpo2s()
+    {
+        return $this->spo2s;
     }
 }
