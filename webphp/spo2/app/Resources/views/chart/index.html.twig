@@ -47,7 +47,9 @@
 						</td>
 					</tr>
 			</table>
- 	  		<div id="container" style="width: 650px; height: 500px; margin: 0 auto">
+				<div id="spo2-chart">
+				</div>
+ 	  		<div id="container-main" style="width: 650px; height: 500px; margin: 0 auto">
 
 				</div>
 	  </div>
@@ -55,6 +57,7 @@
 </div>
 
 <script type="text/javascript">
+
 
 var tstart = [];
 var spo2 = [];
@@ -70,7 +73,7 @@ function toJSDate (dateTime) {
 
 function seperateData(){
 	
-	{% for spo2Param in spo2s %}
+	{% for spo2Param in main_spo2s %}
 			var str="{{spo2Param.datetime}}";
 			starttime = toJSDate(str);
 			tstart.push(starttime);
@@ -94,33 +97,32 @@ function genSeuilManual(form) {
 
 //$(function () {
 $( document ).ready(function() {
-		seperateData();
+		//seperateData();
 		$('input[name="daterange"]').daterangepicker({
 				    timePicker: true,
-				    timePickerIncrement: 3.0,
+				    timePickerIncrement: 1.0,
 						timePicker24Hour :true,
 						timePickerSeconds :true,
 				    locale: {
-				        format: 'MM/DD/YYYY h:mm:ss'
+				        format: 'MM/DD/YYYY HH:mm:ss'
 				    }
 		},
 
 		function(start, end, label) {
-   			alert("A new date range was chosen: " + start.format('MM/DD/YYYY h:mm:ss') + ' to ' + end.format('MM/DD/YYYY h:mm:ss'));
+   			alert("A new date range was chosen: " + start.format('MM/DD/YYYY HH:mm:ss') + ' to ' + end.format('MM/DD/YYYY HH:mm:ss'));
 				$.ajax({
             type: "POST",
             url: "{{ path('updateSpo2chart') }}",
-            data: {tbegin: start.format('MM/DD/YYYY h:mm:ss'), tend: end.format('MM/DD/YYYY h:mm:ss'), sensor_id: "{{sensor.id}}"},
-						
-		
+            data: {tbegin: start.format('YYYY-MM-DD HH:mm:ss'), tend: end.format('YYYY-MM-DD HH:mm:ss'), sensor_id: "{{sensor.id}}"},
             success: function(data)
             {
-                alert(data);
+								$('#spo2-chart').html(data);
+								$('#container-main').toggle();
             }
 				})
 		});
 
-    $('#container').highcharts({
+    $('#container-main').highcharts({
         chart: {
             type: 'areaspline',
 						zoomType: 'x'
@@ -176,7 +178,7 @@ $( document ).ready(function() {
         },
         series: [{
             name: 'SpO2',
-            data: spo2
+            data: []
         },{
             name: 'seuil',
 						type: 'spline',
