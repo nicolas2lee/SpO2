@@ -34,9 +34,11 @@ function genSeuilManual(form) {
     var TestVar = form.inputbox.value;
  		var s= Number(TestVar);
 		list=[];
-		n = 0;
-		while ( n <= spo2.length){
-			list.push([tstart[n],s]); 
+		var n = 0;
+		alert(spo2.length)
+		while ( n < spo2.length){
+			list.push([tstart[n],s]);
+	 		//alert(list[n][0]+' and '+list[n][1])
 			n++;		
 		}
 
@@ -46,6 +48,7 @@ function genSeuilManual(form) {
 
 //$(function () {
 $( document ).ready(function() {
+		spo2 = [];
 		seperateData();
 
     $('#container').highcharts({

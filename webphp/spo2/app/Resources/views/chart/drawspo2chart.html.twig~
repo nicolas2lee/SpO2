@@ -3,13 +3,6 @@
 <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script-->
-test<br />
-{{tbegin}}<br />
-{{tend}}<br />
-{{s_id}}
-{% for spo2Param in spo2s %}
-	{{spo2Param.datetime}}<br />
-{% endfor %}
 <div id="container" style="width: 650px; height: 500px; margin: 0 auto">
 
 </div>
@@ -41,9 +34,11 @@ function genSeuilManual(form) {
     var TestVar = form.inputbox.value;
  		var s= Number(TestVar);
 		list=[];
-		n = 0;
+		var n = 0;
+		alert(spo2.length)
 		while ( n <= spo2.length){
-			list.push([tstart[n],s]); 
+			list.push([tstart[n],s]);
+	 		alert(list[n][0]+' and '+list[n][1])
 			n++;		
 		}
 
@@ -53,6 +48,7 @@ function genSeuilManual(form) {
 
 //$(function () {
 $( document ).ready(function() {
+		spo2 = [];
 		seperateData();
 
     $('#container').highcharts({

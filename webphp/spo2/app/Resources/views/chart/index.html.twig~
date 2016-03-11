@@ -32,25 +32,26 @@
         <!-- /.row -->
 				<h2>Sensor Infomation</h2>
 				{{sensor.name}}<br /><br /> 
-				<table>
+				<table  >
 					<tr>
-						<td>	
-			Enter seuil in the box: <BR>
+						<td width="20%"></td>
+						<td width="45%">	
+			Enter seuil in the box: <br />
 													 	<FORM NAME="myform" ACTION="" METHOD="GET">
-																<INPUT TYPE="text" NAME="inputbox" VALUE=""><P>
-																<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilManual(this.form)">
+																<INPUT TYPE="text" NAME="inputbox" VALUE=""></input><br />
+																<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilManual(this.form)"></input>
 														</FORM>
 						</td>
-
-						<td>
-							<input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
+						<td width="45%">
+			In order to show chaart, please choose date range below : <br />
+								<input size="35" type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
 						</td>
 					</tr>
-			</table>
+				</table>
+				<br /><br />
 				<div id="spo2-chart">
 				</div>
  	  		<div id="container-main" style="width: 650px; height: 500px; margin: 0 auto">
-
 				</div>
 	  </div>
 
@@ -59,41 +60,24 @@
 <script type="text/javascript">
 
 
-var tstart = [];
-var spo2 = [];
+var main_tstart = [];
+var main_spo2 = [];
 
-function toJSDate (dateTime) {
-	var dateTime = dateTime.split(" ");//dateTime[0] = date, dateTime[1] = time
-	var date = dateTime[0].split("-");
-	var time = dateTime[1].split(":");
-	//var ms = time[2].split(".");
-	//(year, month, day, hours, minutes, seconds, milliseconds)
-	return Date.UTC(date[0], date[1], date[2], time[0], time[1], time[2]);
-}
 
-function seperateData(){
-	
-	{% for spo2Param in main_spo2s %}
-			var str="{{spo2Param.datetime}}";
-			starttime = toJSDate(str);
-			tstart.push(starttime);
-			spo2.push([starttime,{{spo2Param.saturation}}]);
-	{% endfor %}
-}
-
+/*
 function genSeuilManual(form) {
     var TestVar = form.inputbox.value;
  		var s= Number(TestVar);
 		list=[];
 		n = 0;
-		while ( n <= spo2.length){
-			list.push([tstart[n],s]); 
+		while ( n <= main_spo2.length){
+			list.push([main_tstart[n],s]); 
 			n++;		
 		}
 
 		var chart = $('#container').highcharts();
         chart.series[1].setData(list);
-}
+}*/
 
 //$(function () {
 $( document ).ready(function() {
@@ -114,7 +98,6 @@ $( document ).ready(function() {
             type: "POST",
             url: "{{ path('updateSpo2chart') }}",
             data: {tbegin: start.format('YYYY-MM-DD HH:mm:ss'), tend: end.format('YYYY-MM-DD HH:mm:ss'), sensor_id: "{{sensor.id}}"},
-						
             success: function(data)
             {
 								$('#spo2-chart').html(data);
