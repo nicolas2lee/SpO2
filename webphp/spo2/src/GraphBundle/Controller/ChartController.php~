@@ -43,17 +43,8 @@ class ChartController extends Controller
 				$tbegin=$request->request->get("tbegin");
 				$tend=$request->request->get("tend");		
 
-/*
-				$sensor_id=2;
-				$tbegin='2015-01-01 22:00:01'	;
-				$tend='2015-09-27 00:10:01';
-*/
 				$em = $this->getDoctrine()->getManager();
-				$q=$em->createQuery(
-						'select s from GraphBundle:Spo2 s
-						where s.datetime > :tbegin and s.datetime < :tend')
-						->setParameter('tbegin',$tbegin);
-/*
+
 				$q=$em->createQuery(
 						'select s from GraphBundle:Spo2 s
 						where s.datetime > :tbegin and s.datetime < :tend and s.sensor = :sensor_id
@@ -62,7 +53,7 @@ class ChartController extends Controller
 				)->setParameter('tbegin',$tbegin)
 				->setParameter('tend',$tend)
 			  ->setParameter('sensor_id',$s_id)
-				;*/
+				;
 				$spo2s=$q->getResult();
 				return $this->render('chart/drawspo2chart.html.twig', array(
 						'spo2s' => $spo2s,
@@ -70,18 +61,7 @@ class ChartController extends Controller
 						'tend' => $tend,
 						's_id'=>$s_id,
 				));
-				//$q = $em->getRepository('GraphBundle:Sensor')->find(2);
-				//$response= new Response(json_encode(array('spo2s'=>$spo2s)));
-				//$response->headers->set('Content-Type','application/json');
-				//return $response;
-				//return new JsonResponse(array('spo2s'=>$spo2s));
 
-
-
-/*
-				return $this->render('chart/test.html.twig', array(
-						'qs' => $spo2s,
-				));*/
 		}
 
 		/**
@@ -94,13 +74,48 @@ class ChartController extends Controller
 				$em = $this->getDoctrine()->getManager();
 				$sensor = $em->getRepository('GraphBundle:Sensor')->find($sensor_id);
 		
-				$movements = $sensor->getMovements();
+				$main_movements = $sensor->getMovements();
 
 				return $this->render('mchart/index.html.twig', array(
 						'sensor' => $sensor,
-						'movements' => $movements,
+						'main_movements' => $main_movements,
 				));
     }
+
+		/**
+     * @Route("/movement/update", name="updateMovementchart")
+     * @Method("POST")
+     */
+		public function updateMovementChart(){
+
+				$request = $this->container->get('request');  
+				$s_id=$request->request->get("sensor_id");
+				$tbegin=$request->request->get("tbegin");
+				$tend=$request->request->get("tend");		
+
+				$em = $this->getDoctrine()->getManager();
+
+				$q=$em->createQuery(
+						'select m from GraphBundle:Movement m
+						where m.tstart > :tbegin and m.tstart < :tend and m.sensor = :sensor_id
+						order by m.tstart ASC
+						'			
+				)->setParameter('tbegin',$tbegin)
+				->setParameter('tend',$tend)
+			  ->setParameter('sensor_id',$s_id)
+				;
+				$movements=$q->getResult();
+				//return new Response(1);
+
+				return $this->render('mchart/drawmovementchart.html.twig', array(
+						'movements' => $movements,
+						'tbegin' => $tbegin,
+						'tend' => $tend,
+						's_id'=>$s_id,
+				));
+
+		}
+
 
 		/**
      *
@@ -117,6 +132,40 @@ class ChartController extends Controller
 				return $this->render('syncchart/index.html.twig', array(
 						'sensor' => $sensor,
 						'movements' => $movements,
+				));
+    }
+
+		/**
+     *
+     * @Route("/syncgraph/update", name="syncchart")
+     * @Method("POST")
+     */
+    public function updateSyncAction()
+    {
+				$request = $this->container->get('request');  
+				$s_id=$request->request->get("sensor_id");
+				$tbegin=$request->request->get("tbegin");
+				$tend=$request->request->get("tend");		
+
+				$em = $this->getDoctrine()->getManager();
+
+				$q=$em->createQuery(
+						'select m from GraphBundle:Movement m
+						where m.tstart > :tbegin and m.tstart < :tend and m.sensor = :sensor_id
+						order by m.tstart ASC
+						' 
+				)->setParameter('tbegin',$tbegin)
+				->setParameter('tend',$tend)
+			  ->setParameter('sensor_id',$s_id)
+				;
+				$syncs=$q->getResult();
+				//return new Response(1);
+
+				return $this->render('syncchart/drawsyncchart.html.twig', array(
+						'syncs' => $syncs,
+						'tbegin' => $tbegin,
+						'tend' => $tend,
+						's_id'=>$s_id,
 				));
     }
 }

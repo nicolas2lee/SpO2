@@ -29,6 +29,7 @@
 		  <!-- /.row -->
 			 <div class="page-wrapper">
             <div class="container-fluid">
+							
                 <div class="row">
                     <div class="col-lg-6">
                         <h2>Sensor list</h2>
@@ -49,7 +50,7 @@
 																		<td><a href="{{ path('sensor_show', { 'id': sensor.id }) }}">{{ sensor.id }}</a></td>
 																		<td>{{ sensor.name }}</td>
 																		<td>{{ sensor.type }}</td>
-																		<td>{{ sensor.userid }}</td>
+																		<td>{#{ sensor.user.id }#}</td>
 																		<td>
 																				<ul>
 																				    <li>

@@ -33,7 +33,7 @@ class Spo2
 
 		/**
      * @ORM\ManyToOne(targetEntity="Sensor", inversedBy="spo2s")
-     * @ORM\JoinColumn(name="spo2sensor_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="spo2_sensor_id", referencedColumnName="id")
      */
 		protected $sensor;
 

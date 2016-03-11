@@ -27,7 +27,7 @@ class SensorType extends AbstractType
         															'Accelerometer' => 'Accelerometer',
         															 ))
    							 )									
-            ->add('user_id',HiddenType::class, array('data' => 1,))
+           
         ;
     }
     

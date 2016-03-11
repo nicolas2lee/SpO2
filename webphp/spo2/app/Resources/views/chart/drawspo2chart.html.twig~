@@ -8,8 +8,10 @@
 </div>
 <script type="text/javascript">
 
-var tstart = [];
-var spo2 = [];
+var seuil;
+function calLessnb(timeinS){
+	alert(seuil)
+}
 
 function toJSDate (dateTime) {
 	var dateTime = dateTime.split(" ");//dateTime[0] = date, dateTime[1] = time
@@ -33,12 +35,13 @@ function seperateData(){
 function genSeuilManual(form) {
     var TestVar = form.inputbox.value;
  		var s= Number(TestVar);
+		seuil=s;
 		list=[];
 		var n = 0;
-		alert(spo2.length)
-		while ( n <= spo2.length){
+		//alert(spo2.length)
+		while ( n < spo2.length){
 			list.push([tstart[n],s]);
-	 		alert(list[n][0]+' and '+list[n][1])
+	 		//alert(list[n][0]+' and '+list[n][1])
 			n++;		
 		}
 
@@ -50,6 +53,28 @@ function genSeuilManual(form) {
 $( document ).ready(function() {
 		spo2 = [];
 		seperateData();
+		$('#setMintime').click(function(){
+				var minDuration=$('#minDuration').val();
+				var timeunity=$('#timeunity').val();
+				var tmin;
+				switch (timeunity){
+						case 's':
+								tmin=minDuration;
+								break;
+						case 'm':
+								tmin=minDuration*60;
+								break;
+						case 'h':
+								tmin=minDuration*60*60;
+								break;
+						case 'd':
+								tmin=minDuration*60*60*24;
+								break;
+				}
+				alert(minDuration)
+				alert(tmin)
+				var nb=calLessnb(tmin);
+		})
 
     $('#container').highcharts({
         chart: {

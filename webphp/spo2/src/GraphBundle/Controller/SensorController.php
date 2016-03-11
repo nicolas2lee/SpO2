@@ -39,12 +39,14 @@ class SensorController extends Controller
      */
     public function indexAction()
     {
+				$user= $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $sensors = $em->getRepository('GraphBundle:Sensor')->findAll();
-			
+				$sensors = $user->getSensors();
         return $this->render('sensor/index.html.twig', array(
             'sensors' => $sensors,
-						'nbSensors' => 2,
+					
+						'user' => $user,
 						
         ));
     }
@@ -156,6 +158,7 @@ class SensorController extends Controller
     public function newAction(Request $request)
     {
         $sensor = new Sensor();
+				$user = $this->getUser();
         $form = $this->createForm('GraphBundle\Form\SensorType', $sensor);
 				$form->add('submit', SubmitType::class, array(
             'label' => 'Create',
@@ -165,6 +168,8 @@ class SensorController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+						
+						$sensor->setUser($user);
             $em->persist($sensor);
             $em->flush();
 
@@ -189,9 +194,10 @@ class SensorController extends Controller
 				$documents=$sensor->getDocuments();
       	
         $deleteForm = $this->createDeleteForm($sensor);
-
+				$user= $sensor->getUser();
         return $this->render('sensor/show.html.twig', array(
             'sensor' => $sensor,
+						'user' =>  $user,
             'delete_form' => $deleteForm->createView(),
 						'documents' => $documents,
 						//'content' => "",

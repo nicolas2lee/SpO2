@@ -32,11 +32,6 @@ class Sensor
    */
 		private $type;
 
-	 /**
-   * @ORM\Column(type="integer")
-   */
-    private $user_id;
-
 		/**
      * @ORM\OneToMany(targetEntity="Document", mappedBy="sensor")
      */
@@ -51,6 +46,14 @@ class Sensor
      * @ORM\OneToMany(targetEntity="Spo2", mappedBy="sensor")
      */
 		protected $spo2s;
+		
+
+		/**
+     * @ORM\ManyToOne(targetEntity="AccountBundle\Entity\User", inversedBy="sensors")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+		protected $user;
+
 
 		public function __construct()
     {
@@ -114,29 +117,6 @@ class Sensor
         return $this->type;
     }
 
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     *
-     * @return Sensor
-     */
-    public function setUserId($userId)
-    {
-        $this->user_id = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return integer
-     */
-    public function getUserId()
-    {
-        return $this->user_id;
-    }
 
     /**
      * Add document
@@ -238,5 +218,31 @@ class Sensor
     public function getSpo2s()
     {
         return $this->spo2s;
+    }
+
+
+
+    /**
+     * Set user
+     *
+     * @param \AccountBundle\Entity\User $user
+     *
+     * @return Sensor
+     */
+    public function setUser(\AccountBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AccountBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

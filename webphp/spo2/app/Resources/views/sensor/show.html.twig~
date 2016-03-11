@@ -36,8 +36,7 @@
 					{{doc.path}}<br />
 					{{doc.getWebPath()}}
 					<h3>content is<br /></h3>
-					$contents = file_get_contents($document->getWebPath());
-					{{ content }}
+					
 				{% endfor%}
 			
 				</div>

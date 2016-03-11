@@ -1,0 +1,46 @@
+<?php
+
+namespace AccountBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User as BaseUser;
+
+/**
+ * Fos_user
+ *
+ * @ORM\Table(name="fos_user")
+ * @ORM\Entity(repositoryClass="AccountBundle\Repository\Fos_userRepository")
+ */
+class Fos_user extends BaseUser
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+
+		/**
+     * @ORM\OneToMany(targetEntity="GraphBundle\Entity\Sensor", mappedBy="user")
+     */
+		protected $sensors;
+	
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+		public function __construct()
+    {
+        parent::__construct();
+        // your own logic
+    }
+
+		
+
+
+
+
+}

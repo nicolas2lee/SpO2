@@ -23,7 +23,7 @@ class SensorType extends AbstractType
             ->add('type',ChoiceType::class, array(
     											'choices'  => array(
 																			'' => '',
-        															'SpO2 test' => 'SpO2',
+        															'SpO2' => 'SpO2',
         															'Accelerometer' => 'Accelerometer',
         															 ))
    							 )									

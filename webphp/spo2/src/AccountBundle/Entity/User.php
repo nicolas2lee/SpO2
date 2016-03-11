@@ -21,8 +21,12 @@ class User extends BaseUser
     protected $id;
 
 
+		/**
+     * @ORM\OneToMany(targetEntity="GraphBundle\Entity\Sensor", mappedBy="user")
+     */
+		protected $sensors;
+	
 
- 	
     public function getId()
     {
         return $this->id;
@@ -35,5 +39,42 @@ class User extends BaseUser
     }
 
 		
-}
 
+
+
+
+
+    /**
+     * Add sensor
+     *
+     * @param \GraphBundle\Entity\Sensor $sensor
+     *
+     * @return Fos_user
+     */
+    public function addSensor(\GraphBundle\Entity\Sensor $sensor)
+    {
+        $this->sensors[] = $sensor;
+
+        return $this;
+    }
+
+    /**
+     * Remove sensor
+     *
+     * @param \GraphBundle\Entity\Sensor $sensor
+     */
+    public function removeSensor(\GraphBundle\Entity\Sensor $sensor)
+    {
+        $this->sensors->removeElement($sensor);
+    }
+
+    /**
+     * Get sensors
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSensors()
+    {
+        return $this->sensors;
+    }
+}

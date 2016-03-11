@@ -34,18 +34,31 @@
 				{{sensor.name}}<br /><br /> 
 				<table  >
 					<tr>
-						<td width="20%"></td>
-						<td width="45%">	
+						<td width="10%"></td>
+						<td width="30%">
+			Please choose date range below : <br />
+							<input size="35" type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
+						</td>
+						<td width="20%">	
 			Enter seuil in the box: <br />
 													 	<FORM NAME="myform" ACTION="" METHOD="GET">
 																<INPUT TYPE="text" NAME="inputbox" VALUE=""></input><br />
 																<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilManual(this.form)"></input>
 														</FORM>
 						</td>
-						<td width="45%">
-			In order to show chaart, please choose date range below : <br />
-								<input size="35" type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
+						<td width="20%">
+					Enter the minimum duration <br />
+					when value > spo2 continously<br />
+					<input id="minDuration" TYPE="text" NAME="inputbox" VALUE=""></input>
+					<select id="timeunity">
+						 <option value="m">m</option>
+						 <option value="d">d</option>
+						 <option value="h">h</option>
+						 <option value="s">s</option>
+					</select><br />
+					<input id= "setMintime" TYPE="button" NAME="button" Value="Submit" onClick="setMintime"></input>
 						</td>
+						
 					</tr>
 				</table>
 				<br /><br />
@@ -63,6 +76,10 @@
 var main_tstart = [];
 var main_spo2 = [];
 
+var tstart = [];
+var spo2 = [];
+
+
 $( document ).ready(function() {
 		//seperateData();
 		$('input[name="daterange"]').daterangepicker({
@@ -76,7 +93,7 @@ $( document ).ready(function() {
 		},
 
 		function(start, end, label) {
-   			alert("A new date range was chosen: " + start.format('MM/DD/YYYY HH:mm:ss') + ' to ' + end.format('MM/DD/YYYY HH:mm:ss'));
+   			//alert("A new date range was chosen: " + start.format('MM/DD/YYYY HH:mm:ss') + ' to ' + end.format('MM/DD/YYYY HH:mm:ss'));
 				$.ajax({
             type: "POST",
             url: "{{ path('updateSpo2chart') }}",
@@ -88,6 +105,7 @@ $( document ).ready(function() {
             }
 				})
 		});
+		
 
     $('#container-main').highcharts({
         chart: {

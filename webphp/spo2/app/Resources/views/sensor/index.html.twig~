@@ -29,6 +29,7 @@
 		  <!-- /.row -->
 			 <div class="page-wrapper">
             <div class="container-fluid">
+							
                 <div class="row">
                     <div class="col-lg-6">
                         <h2>Sensor list</h2>
@@ -49,7 +50,7 @@
 																		<td><a href="{{ path('sensor_show', { 'id': sensor.id }) }}">{{ sensor.id }}</a></td>
 																		<td>{{ sensor.name }}</td>
 																		<td>{{ sensor.type }}</td>
-																		<td>{{ sensor.userid }}</td>
+																		<td>{#{ sensor.user.id }}</td>
 																		<td>
 																				<ul>
 																				    <li>
@@ -88,27 +89,6 @@
 	
 		
 </div>
-<!--script>
-//$('#test_ajaxrequest').click(function(){
-$(document).ready(function(){
-	alert('clicked')
-	for (i=0; i< {{ nbSensors }} ;i++){
-		$.ajax({
-			 type: "GET",
-		          url: "{{ path('sensor_uploadfile') }}",
-		         
-		          success: function(data)
-		          {
-				
-		              alert(i);
-									tag ='.render_text'+i;
-									alert(tag)
-									$(tag).html(data)
-		          }
-		})
-	}
-})
 
-</script-->
 <!-- /#page-wrapper -->
 {% endblock %}
