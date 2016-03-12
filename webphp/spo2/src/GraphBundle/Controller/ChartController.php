@@ -54,7 +54,9 @@ class ChartController extends Controller
 				->setParameter('tend',$tend)
 			  ->setParameter('sensor_id',$s_id)
 				;
+
 				$spo2s=$q->getResult();
+			//	return new Response($spo2s);
 				return $this->render('chart/drawspo2chart.html.twig', array(
 						'spo2s' => $spo2s,
 						'tbegin' => $tbegin,
@@ -119,19 +121,31 @@ class ChartController extends Controller
 
 		/**
      *
-     * @Route("/{sensor_id}/syncgraph", name="syncchart")
+     * @Route("/syncgraph", name="syncchart")
      * @Method("GET")
      */
-    public function syncAction($sensor_id)
+    public function syncAction()
     {
-				$em = $this->getDoctrine()->getManager();
-				$sensor = $em->getRepository('GraphBundle:Sensor')->find($sensor_id);
-			//	if ($sensor->getType()==)
-				$movements = $sensor->getMovements();
 
+	
+				$user=$this->getUser();
+				$sensors = $user->getSensors();
+
+				//Need to be improved
+				/*In a sipmle case, we retrive all data jsut by the order of sensors
+					the order of data among sensors is not sure.
+				*//*	
+				foreach($sensors as $s){
+					switch($s->getType()){
+							case 'SpO2': $spo2_s=$s; break;
+											
+							case 'Accelerometer':$mov_s=$s; break;
+					}
+				}		*/	
+		
 				return $this->render('syncchart/index.html.twig', array(
-						'sensor' => $sensor,
-						'movements' => $movements,
+
+						'sensors' => $sensors,
 				));
     }
 

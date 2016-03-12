@@ -42,7 +42,9 @@
         </div>
         <!-- /.row -->
  				<h2>Sensor Infomation</h2>
-				{{sensor.name}}<br /><br />
+				{%for sensor in sensors%}
+				{{sensor.name}}<br />{{sensor.type}}<br />
+				{%endfor%}
 				<table>
 						<tr>
 								<td width="10%">
@@ -103,7 +105,8 @@ $( document ).ready(function() {
 				$.ajax({
             type: "POST",
             url: "{{ path('updateMovementchart') }}",
-            data: {tbegin: start.format('YYYY-MM-DD HH:mm:ss'), tend: end.format('YYYY-MM-DD HH:mm:ss'), sensor_id: "{{sensor.id}}"},
+						data: {tbegin: start.format('YYYY-MM-DD HH:mm:ss'), tend: end.format('YYYY-MM-DD HH:mm:ss'), sensor_id: "{{sensor.id}}"},
+          
             success: function(data)
             {
 								alert(data);
