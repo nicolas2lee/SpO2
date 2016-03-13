@@ -156,30 +156,64 @@ class ChartController extends Controller
      */
     public function updateSyncAction()
     {
+
+				$user=$this->getUser();
+				$sensors = $user->getSensors();
+
 				$request = $this->container->get('request');  
-				$s_id=$request->request->get("sensor_id");
 				$tbegin=$request->request->get("tbegin");
 				$tend=$request->request->get("tend");		
 
+/*
+				$tbegin = '2015-6-27 00:30:00';
+				$tend = '2015-6-27 02:30:00';
+*/
 				$em = $this->getDoctrine()->getManager();
 
-				$q=$em->createQuery(
-						'select m from GraphBundle:Movement m
-						where m.tstart > :tbegin and m.tstart < :tend and m.sensor = :sensor_id
-						order by m.tstart ASC
-						' 
-				)->setParameter('tbegin',$tbegin)
-				->setParameter('tend',$tend)
-			  ->setParameter('sensor_id',$s_id)
-				;
-				$syncs=$q->getResult();
-				//return new Response(1);
 
+				foreach($sensors as $s){
+					switch($s->getType()){
+							case 'SpO2': $spo2_s=$s;
+													 $q=$em->createQuery(
+																							'select s from GraphBundle:Spo2 s
+																							where s.datetime > :tbegin 
+																							' 
+																							)->setParameter('tbegin',$tbegin)
+																						
+																							;
+													 $spo2s=$q->getResult();
+													 break;
+											
+							case 'Accelerometer':	$mov_s=$s;
+																		$q=$em->createQuery(
+																							'select m from GraphBundle:Movement m
+																							where m.tstart > :tbegin and m.tstart < :tend 
+																							order by m.tstart ASC
+																							' 
+																							)->setParameter('tbegin',$tbegin)
+																							->setParameter('tend',$tend)
+																							;
+																		$moves=$q->getResult();
+																	  break;
+					}
+				}	
+			//return new Response($mov_s->getName());
+/*
+				return $this->render('syncchart/test.html.twig', array(
+						//'syncs' => $syncs,
+						'spo2s' => $spo2s,
+						'moves' => $moves,
+						'spo2_s' => $spo2_s,
+						'mov_s' => $mov_s,
+
+				));*/
 				return $this->render('syncchart/drawsyncchart.html.twig', array(
-						'syncs' => $syncs,
-						'tbegin' => $tbegin,
-						'tend' => $tend,
-						's_id'=>$s_id,
+						//'syncs' => $syncs,
+						'spo2s' => $spo2s,
+						'moves' => $moves,
+						'spo2_s' => $spo2_s,
+						'mov_s' => $mov_s,
+
 				));
     }
 }

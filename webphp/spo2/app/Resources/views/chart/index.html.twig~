@@ -53,8 +53,8 @@
 					<select id="timeunity">
 						 <option value="s">s</option>
 						 <option value="m">m</option>
-						 <option value="d">d</option>
 						 <option value="h">h</option>
+						 <option value="d">d</option>
 					</select><br />
 					<input id= "setMintime" TYPE="button" NAME="button" Value="Submit" onClick="setMintime"></input>
 						</td>

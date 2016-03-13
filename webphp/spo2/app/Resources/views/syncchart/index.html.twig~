@@ -47,10 +47,15 @@
 				{%endfor%}
 				<table>
 						<tr>
-								<td width="10%">
+								<td width="20%">
+											Enter threshold of SpO2 in the box: 
+											<FORM NAME="myform" ACTION="" METHOD="GET">
+													<INPUT TYPE="text" NAME="inputbox" VALUE=""><P>
+													<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilSpo2(this.form)">
+											</FORM>
 								</td>
 
-								<td width="30%">
+								<td width="20%">
 										<!--div class="col-lg-6"-->
 											Enter threshold of MI in the box:
 										 	<FORM NAME="myform" ACTION="" METHOD="GET">
@@ -61,7 +66,7 @@
 										<div class="col-lg-6"-->
 								</td>
 
-								<td width="30%">
+								<td width="20%">
 											Enter threshold of VMU in the box: 
 											<FORM NAME="myform" ACTION="" METHOD="GET">
 													<INPUT TYPE="text" NAME="inputbox" VALUE=""><P>
@@ -71,15 +76,16 @@
 								</td>
 
 								<td width="30%">
-									<input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />	
+									Please choose date range below : <br />
+									<input size="35" type="text" name="daterange" value="06/27/2015 00:00:00 - 06/27/2015 02:00:00" />	
 								</td>
 						</tr>
 				</table>
 
-				<div id="movement-chart">
+				<div id="sync-chart">
 				</div>
 
- 	  		<div id="container" style="width: 1000px; height: 600px; margin: 0 auto">
+ 	  		<div id="container" style="width: 2000px; height: 600px; margin: 0 auto">
 				</div>
 
 				<br /><br /><br /><br />
@@ -104,13 +110,13 @@ $( document ).ready(function() {
    			alert("A new date range was chosen: " + start.format('MM/DD/YYYY HH:mm:ss') + ' to ' + end.format('MM/DD/YYYY HH:mm:ss'));
 				$.ajax({
             type: "POST",
-            url: "{{ path('updateMovementchart') }}",
-						data: {tbegin: start.format('YYYY-MM-DD HH:mm:ss'), tend: end.format('YYYY-MM-DD HH:mm:ss'), sensor_id: "{{sensor.id}}"},
+            url: "{{ path('updatesyncchart') }}",
+						data: {tbegin: start.format('YYYY-MM-DD HH:mm:ss'), tend: end.format('YYYY-MM-DD HH:mm:ss')},
           
             success: function(data)
             {
 								alert(data);
-								$('#movement-chart').html(data);
+								$('#sync-chart').html(data);
 							  //$('#container').toggle();
             }
 				})

@@ -1,5 +1,5 @@
 
-<div id="container" style="width: 650px; height: 500px; margin: 0 auto">
+<div id="container" style="width: 1000px; height: 500px; margin: 0 auto">
 </div>
 <script type="text/javascript">
 var nbSteps=[];
@@ -9,7 +9,9 @@ var MET=[];
 var VMU=[];
 var MI=[];
 var tstart=[];
+var tbegin=[];
 var moveclass=[];
+var spo2=[];
 
 function toJSDate (dateTime) {
 	var dateTime = dateTime.split(" ");//dateTime[0] = date, dateTime[1] = time
@@ -22,19 +24,27 @@ function toJSDate (dateTime) {
 }
 
 function seperateData(){
-	
-	{% for sync in syncs %}
-			var str="{{sync.tstart}}";
-			starttime = toJSDate(str);
-		//	duration.push({{mov.duration}});
-			tstart.push(starttime);
-			nbSteps.push([starttime, {{mov.nbSteps}}]);
-			AEE.push([starttime, {{mov.AEE}}]);
-			TEE.push([starttime, {{mov.TEE}}]);		
-			MET.push([starttime, {{mov.MET}}]);
-			MI.push([starttime, {{mov.MI}}]);
-			moveclass.push("{{mov.class}}");
+
+	{% for s in spo2s %}
+			var str="{{s.datetime}}";
+			var starttime = toJSDate(str);
+			tbegin.push(starttime);
+			spo2.push([starttime,{{s.saturation}}]);
 	{% endfor %}
+
+	{% for mov in moves %}
+	//	duration.push({{mov.duration}});
+		var st="{{mov.tstart}}";
+		var starttime = toJSDate(st);
+		tstart.push(starttime);
+		nbSteps.push([starttime, {{mov.nbSteps}}]);
+		AEE.push([starttime, {{mov.AEE}}]);
+		TEE.push([starttime, {{mov.TEE}}]);		
+		MET.push([starttime, {{mov.MET}}]);
+		MI.push([starttime, {{mov.MI}}]);
+		moveclass.push("{{mov.class}}");
+	{% endfor %}
+
 }
 
 function genClass(){
@@ -96,7 +106,23 @@ function genSeuilVMU(form) {
         chart.series[7].setData(list);
 }
 
-$( document ).ready(function() {
+function genSeuilSpo2(form) {
+    var TestVar = form.inputbox.value;
+ 		var s= Number(TestVar);
+		list=[];
+		var n = 0;
+		//alert(spo2.length)
+		while ( n < spo2.length){
+			list.push([tbegin[n],s]);
+			n++;		
+		}
+
+		var chart = $('#container').highcharts();
+        chart.series[9].setData(list);
+}
+
+
+$(document).ready(function() {
 		seperateData();
     $('#container').highcharts({
 
@@ -105,10 +131,10 @@ $( document ).ready(function() {
 				},
 				
         title: {
-            text: 'Movement chart',
+            text: 'Sync chart',
             x: -20 //center
         },
-        xAxis: {
+        xAxis: [{
 						// visualize the class 
             plotBands: genClass(),
 						type: 'datetime',
@@ -122,50 +148,94 @@ $( document ).ready(function() {
 							month: '%b \'%y',
 							year: '%Y'
 						}
-        },
-        yAxis: {
-            title: {
-                text: 'movement'
-            },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }]
-        },
+        }],
+        yAxis: [{// Primary yAxis movement
+									labels: {
+						          format: '{value}',
+						          style: {
+						              color: Highcharts.getOptions().colors[1]
+						          }
+						      },
+
+						      title: {
+						          text: 'movement',
+						          style: {
+						              color: Highcharts.getOptions().colors[1]
+						          }
+						      }
+
+       				 },{// Secondary yAxis spo2
+									gridLineWidth: 0,
+						      title: {
+						          text: 'SpO2',
+						          style: {
+						              color:"#7cb5ec"
+						          }
+						      },
+						      labels: {
+						          format: '{value}',
+						          style: {
+						              color: "#7cb5ec"
+						          }
+						      },
+						      opposite: true
+						  },{// Third yAxis MI
+									gridLineWidth: 0,
+						      title: {
+						          text: 'MI',
+						          style: {
+						              color: "#468499"
+						          }
+						      },
+						      labels: {
+						          format: '{value}',
+						          style: {
+						              color: "#468499"
+						          }
+						      },
+						      opposite: true
+						  }],
+
         tooltip: {
             valueSuffix: ''
         },
-        legend: {
+       /* legend: {
             layout: 'vertical',
             align: 'right',
             verticalAlign: 'middle',
             borderWidth: 0
-        },
+        },*/
         series: [{
             name: 'Steps',
             data: nbSteps,
-						step: true
+						step: true,
+						color : "#800080"
         }, {
             name: 'AEE',
             data: AEE,
-						step: true
+						step: true,
+						color: "#ff4040"
         }, {
             name: 'TEE',
             data: TEE,
-						step: true
+						step: true,
+						color: "#008000"
         }, {
             name: 'MET',
             data: MET,
-						step: true
+						step: true,
+						color: "#666666"
         },{
             name: 'VMU',
             data: VMU,
-						step: true
+						step: true,
+						color: "#daa520"
         },{
             name: 'MI',
             data: MI,
-						step: true
+						yAxis: 2,
+						step: true,
+						color : "#468499"
         },{
             name: 'threshold of MI',
 						type: 'spline',
@@ -175,7 +245,19 @@ $( document ).ready(function() {
             name: 'threshold of VMU',
 						type: 'spline',
             data: [],
-						color : "#E9F01D"
+						color : "#00ced1"
+        },{
+            name: 'SpO2',
+            data: spo2,
+						yAxis: 1,
+						
+						color : "#7cb5ec"
+        },{
+            name: 'threshold of SpO2',
+						type: 'spline',
+            data: [],
+						yAxis: 1,
+						color : "#00FF00"
         }]
     });
 })

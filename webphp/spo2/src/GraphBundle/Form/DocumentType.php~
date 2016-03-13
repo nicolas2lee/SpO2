@@ -29,7 +29,7 @@ class DocumentType extends AbstractType
         															 ))
    							 )							
 						->add('name')	
-						 ->add('file')
+						->add('file')
         ;
     }
     

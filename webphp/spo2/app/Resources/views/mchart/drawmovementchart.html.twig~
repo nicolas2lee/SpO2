@@ -1,7 +1,4 @@
 
-				{% for mov in movements%}
-						{{mov.tstart}}
-				{% endfor %}
 <div id="container" style="width: 650px; height: 500px; margin: 0 auto">
 </div>
 <script type="text/javascript">

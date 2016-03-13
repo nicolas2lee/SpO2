@@ -45,7 +45,7 @@ class SensorController extends Controller
 				$sensors = $user->getSensors();
         return $this->render('sensor/index.html.twig', array(
             'sensors' => $sensors,
-						//'nbSensors' => ,
+					
 						'user' => $user,
 						
         ));
@@ -79,7 +79,7 @@ class SensorController extends Controller
           $em->flush();
 					//$myfile = fopen("webdictionary.txt", "r") or die("Unable to open file!");
 					//$contents = file_get_contents($document->getWebPath());
-
+/*
 					if($document->getType()== "SpO2"){
 
 							$myfile = fopen($document->getWebPath(), "r");
@@ -128,12 +128,12 @@ class SensorController extends Controller
 									}
 									fclose($myfile);
 							}else{}
-					}
-
+					}*/
+/*
 					return $this->render('UploadFile/test.html.twig', array(		    
 							'line' => $args
 					));
-					
+*/					
 					//$data = $this->chargeData($document);
           return $this->redirectToRoute('sensor_show', 
 					array('id' => $sensor->getId(),

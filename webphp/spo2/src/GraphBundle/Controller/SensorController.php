@@ -129,11 +129,11 @@ class SensorController extends Controller
 									fclose($myfile);
 							}else{}
 					}
-
+/*
 					return $this->render('UploadFile/test.html.twig', array(		    
 							'line' => $args
 					));
-					
+*/					
 					//$data = $this->chargeData($document);
           return $this->redirectToRoute('sensor_show', 
 					array('id' => $sensor->getId(),

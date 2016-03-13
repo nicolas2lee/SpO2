@@ -73,9 +73,7 @@
 								</td>
 						</tr>
 				</table>
-				{% for mov in movements%}
-						{{mov.tstart}}
-				{% endfor %}
+
 				<div id="movement-chart">
 				</div>
 
