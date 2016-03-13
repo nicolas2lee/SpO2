@@ -32,11 +32,6 @@ class Sensor
    */
 		private $type;
 
-	 /**
-   * @ORM\Column(type="integer")
-   */
-    private $user_id;
-
 		/**
      * @ORM\OneToMany(targetEntity="Document", mappedBy="sensor")
      */
@@ -46,6 +41,19 @@ class Sensor
      * @ORM\OneToMany(targetEntity="Movement", mappedBy="sensor")
      */
 		protected $movements;
+
+		/**
+     * @ORM\OneToMany(targetEntity="Spo2", mappedBy="sensor")
+     */
+		protected $spo2s;
+		
+
+		/**
+     * @ORM\ManyToOne(targetEntity="AccountBundle\Entity\User", inversedBy="sensors")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+		protected $user;
+
 
 		public function __construct()
     {
@@ -109,29 +117,6 @@ class Sensor
         return $this->type;
     }
 
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     *
-     * @return Sensor
-     */
-    public function setUserId($userId)
-    {
-        $this->user_id = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return integer
-     */
-    public function getUserId()
-    {
-        return $this->user_id;
-    }
 
     /**
      * Add document
@@ -199,5 +184,71 @@ class Sensor
     public function getMovements()
     {
         return $this->movements;
+    }
+
+    /**
+     * Add spo2
+     *
+     * @param \GraphBundle\Entity\Spo2 $spo2
+     *
+     * @return Sensor
+     */
+    public function addSpo2(\GraphBundle\Entity\Spo2 $spo2)
+    {
+        $this->spo2s[] = $spo2;
+
+        return $this;
+    }
+
+    /**
+     * Remove spo2
+     *
+     * @param \GraphBundle\Entity\Spo2 $spo2
+     */
+    public function removeSpo2(\GraphBundle\Entity\Spo2 $spo2)
+    {
+        $this->spo2s->removeElement($spo2);
+    }
+
+    /**
+     * Get spo2s
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSpo2s()
+    {
+        return $this->spo2s;
+    }
+
+
+
+
+
+
+
+
+
+    /**
+     * Set user
+     *
+     * @param \AccountBundle\Entity\User $user
+     *
+     * @return Sensor
+     */
+    public function setUser(\AccountBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AccountBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

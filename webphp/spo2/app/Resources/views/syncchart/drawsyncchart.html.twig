@@ -1,0 +1,264 @@
+
+<div id="container" style="width: 1000px; height: 500px; margin: 0 auto">
+</div>
+<script type="text/javascript">
+var nbSteps=[];
+var AEE=[];
+var TEE=[];
+var MET=[];
+var VMU=[];
+var MI=[];
+var tstart=[];
+var tbegin=[];
+var moveclass=[];
+var spo2=[];
+
+function toJSDate (dateTime) {
+	var dateTime = dateTime.split(" ");//dateTime[0] = date, dateTime[1] = time
+	var date = dateTime[0].split("-");
+	var time = dateTime[1].split(":");
+	//var ms = time[2].split(".");
+	//(year, month, day, hours, minutes, seconds, milliseconds)
+	return Date.UTC(date[0], date[1], date[2], time[0], time[1], time[2]);
+
+}
+
+function seperateData(){
+
+	{% for s in spo2s %}
+			var str="{{s.datetime}}";
+			var starttime = toJSDate(str);
+			tbegin.push(starttime);
+			spo2.push([starttime,{{s.saturation}}]);
+	{% endfor %}
+
+	{% for mov in moves %}
+	//	duration.push({{mov.duration}});
+		var st="{{mov.tstart}}";
+		var starttime = toJSDate(st);
+		tstart.push(starttime);
+		nbSteps.push([starttime, {{mov.nbSteps}}]);
+		AEE.push([starttime, {{mov.AEE}}]);
+		TEE.push([starttime, {{mov.TEE}}]);		
+		MET.push([starttime, {{mov.MET}}]);
+		MI.push([starttime, {{mov.MI}}]);
+		moveclass.push("{{mov.class}}");
+	{% endfor %}
+
+}
+
+function genClass(){
+		var res=[];
+		for (i=0; i < moveclass.length;i++)
+				if (i!=moveclass.length-1){
+					switch (moveclass[i]){
+							case "standing":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(255, 51, 255, .5)'})
+								break;
+							case "sitting":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(255, 102, 255, .5)'})
+								break;
+							case "lying":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(255, 153, 255, .5)'})
+								break;
+							case "shuffling":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(204, 0, 204, .5)'})
+								break;
+							case "walking":
+								res.push({from: tstart[i], to:tstart[i+1],  color: 'rgba(102, 0, 102, .5)'})
+								break;
+							default:
+								break
+					}
+				}
+		return res;
+		
+}
+
+function genSeuilMI(form) {
+    var TestVar = form.inputbox.value;
+		//alert(TestVar);
+ 		var s= Number(TestVar);
+		seuil=s;
+		list=[];
+		var n = 0;
+		while ( n < tstart.length){
+			list.push([tstart[n],s]); 
+			n++;		
+		}
+		//alert(list.length);
+		var chart = $('#container').highcharts();
+        chart.series[6].setData(list);
+}
+
+function genSeuilVMU(form) {
+    var TestVar = form.inputbox.value;
+		//alert(TestVar);
+ 		var s= Number(TestVar);
+		list=[];
+		var n = 0;
+		while ( n < tstart.length){
+			list.push([tstart[n],s]); 
+			n++;		
+		}
+		//alert(list.length);
+		var chart = $('#container').highcharts();
+        chart.series[7].setData(list);
+}
+
+function genSeuilSpo2(form) {
+    var TestVar = form.inputbox.value;
+ 		var s= Number(TestVar);
+		list=[];
+		var n = 0;
+		//alert(spo2.length)
+		while ( n < tbegin.length){
+			list.push([tbegin[n],s]);
+			n++;		
+		}
+
+		var chart = $('#container').highcharts();
+        chart.series[9].setData(list);
+}
+
+
+$(document).ready(function() {
+		seperateData();
+    $('#container').highcharts({
+
+				chart: {
+						zoomType: 'x'
+				},
+				
+        title: {
+            text: 'Sync chart',
+            x: -20 //center
+        },
+        xAxis: [{
+						// visualize the class 
+            plotBands: genClass(),
+						type: 'datetime',
+						dateTimeLabelFormats:{
+							//millisecond: '%H:%M:%S.%L',
+							second: '%H:%M:%S',
+							minute: '%H:%M',
+							hour: '%H:%M',
+							day: '%e. %b',
+							week: '%e. %b',
+							month: '%b \'%y',
+							year: '%Y'
+						}
+        }],
+        yAxis: [{// Primary yAxis movement
+									labels: {
+						          format: '{value}',
+						          style: {
+						              color: Highcharts.getOptions().colors[1]
+						          }
+						      },
+
+						      title: {
+						          text: 'movement',
+						          style: {
+						              color: Highcharts.getOptions().colors[1]
+						          }
+						      }
+
+       				 },{// Secondary yAxis spo2
+									gridLineWidth: 0,
+						      title: {
+						          text: 'SpO2',
+						          style: {
+						              color:"#7cb5ec"
+						          }
+						      },
+						      labels: {
+						          format: '{value}',
+						          style: {
+						              color: "#7cb5ec"
+						          }
+						      },
+						      opposite: true
+						  },{// Third yAxis MI
+									gridLineWidth: 0,
+						      title: {
+						          text: 'MI',
+						          style: {
+						              color: "#468499"
+						          }
+						      },
+						      labels: {
+						          format: '{value}',
+						          style: {
+						              color: "#468499"
+						          }
+						      },
+						      opposite: true
+						  }],
+
+        tooltip: {
+            valueSuffix: ''
+        },
+       /* legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },*/
+        series: [{
+            name: 'Steps',
+            data: nbSteps,
+						step: true,
+						color : "#800080"
+        }, {
+            name: 'AEE',
+            data: AEE,
+						step: true,
+						color: "#ff4040"
+        }, {
+            name: 'TEE',
+            data: TEE,
+						step: true,
+						color: "#008000"
+        }, {
+            name: 'MET',
+            data: MET,
+						step: true,
+						color: "#666666"
+        },{
+            name: 'VMU',
+            data: VMU,
+						step: true,
+						color: "#daa520"
+        },{
+            name: 'MI',
+            data: MI,
+						yAxis: 2,
+						step: true,
+						color : "#468499"
+        },{
+            name: 'threshold of MI',
+						type: 'spline',
+            data: [],
+						color : "#FF0000"
+        },{
+            name: 'threshold of VMU',
+						type: 'spline',
+            data: [],
+						color : "#00ced1"
+        },{
+            name: 'SpO2',
+            data: spo2,
+						yAxis: 1,
+						
+						color : "#7cb5ec"
+        },{
+            name: 'threshold of SpO2',
+						type: 'spline',
+            data: [],
+						yAxis: 1,
+						color : "#00FF00"
+        }]
+    });
+})
+</script>

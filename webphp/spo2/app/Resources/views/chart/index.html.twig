@@ -1,11 +1,16 @@
 {% extends 'layout/layout.html.twig' %}
-{% block title %} Chart | Index{% endblock %}
+{% block title %} <title>Chart | SpO2 </title>{% endblock %}
 
 {% block main_body %}
 <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 
 <div class="page-wrapper">
 
@@ -15,23 +20,51 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">
-                    SpO2Chart 
+                    SpO2 Chart 
                 </h1>
                 <ol class="breadcrumb">
                     <li class="active">
-                        <i class="fa fa-dashboard"></i> Enter seuil in the box: <BR>
-													 	<FORM NAME="myform" ACTION="" METHOD="GET">
-																<INPUT TYPE="text" NAME="inputbox" VALUE=""><P>
-																<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilManual(this.form)">
-														</FORM>
+                        <i class="fa fa-dashboard">SpO2 Chart</i> 
                     </li>
                 </ol>
             </div>
         </div>
         <!-- /.row -->
- 
- 	  		<div id="container" style="width: 650px; height: 500px; margin: 0 auto">
-
+				<h2>Sensor Infomation</h2>
+				{{sensor.name}}<br /><br /> 
+				<table  >
+					<tr>
+						<td width="10%"></td>
+						<td width="30%">
+			Please choose date range below : <br />
+							<input size="35" type="text" name="daterange" value="06/27/2015 00:00:00 - 06/27/2015 01:00:00" />
+						</td>
+						<td width="20%">	
+			Enter seuil in the box: <br />
+													 	<FORM NAME="myform" ACTION="" METHOD="GET">
+																<INPUT TYPE="text" NAME="inputbox" VALUE=""></input><br />
+																<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilManual(this.form)"></input>
+														</FORM>
+						</td>
+						<td width="20%">
+					Enter the minimum duration <br />
+					when value > spo2 continously<br />
+					<input id="minDuration" TYPE="text" NAME="inputbox" VALUE=""></input>
+					<select id="timeunity">
+						 <option value="s">s</option>
+						 <option value="m">m</option>
+						 <option value="h">h</option>
+						 <option value="d">d</option>
+					</select><br />
+					<input id= "setMintime" TYPE="button" NAME="button" Value="Submit" onClick="setMintime"></input>
+						</td>
+						
+					</tr>
+				</table>
+				<br /><br />
+				<div id="spo2-chart">
+				</div>
+ 	  		<div id="container-main" style="width: 650px; height: 500px; margin: 0 auto">
 				</div>
 	  </div>
 
@@ -39,10 +72,46 @@
 
 <script type="text/javascript">
 
-$(function () {
-    $('#container').highcharts({
+
+var main_tstart = [];
+var main_spo2 = [];
+
+var tstart = [];
+var spo2 = [];
+
+
+$( document ).ready(function() {
+		//seperateData();
+		$('input[name="daterange"]').daterangepicker({
+				    timePicker: true,
+				    timePickerIncrement: 1.0,
+						timePicker24Hour :true,
+						timePickerSeconds :true,
+				    locale: {
+				        format: 'MM/DD/YYYY HH:mm:ss'
+				    }
+		},
+
+		function(start, end, label) {
+   			alert("A new date range was chosen: " + start.format('MM/DD/YYYY HH:mm:ss') + ' to ' + end.format('MM/DD/YYYY HH:mm:ss'));
+				$.ajax({
+            type: "POST",
+            url: "{{ path('updateSpo2chart') }}",
+            data: {tbegin: start.format('YYYY-MM-DD HH:mm:ss'), tend: end.format('YYYY-MM-DD HH:mm:ss'), sensor_id: "{{sensor.id}}"},
+            success: function(data)
+            {
+								//alert(data)
+								$('#spo2-chart').html(data);
+								$('#container-main').toggle();
+            }
+				})
+		});
+		
+
+    $('#container-main').highcharts({
         chart: {
-            type: 'areaspline'
+            type: 'areaspline',
+						zoomType: 'x'
         },
         title: {
             text: 'SpO2 Rate'
@@ -58,26 +127,22 @@ $(function () {
             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
         },
         xAxis: {
+					type: 'datetime',
+
+					dateTimeLabelFormats:{
+						//millisecond: '%H:%M:%S.%L',
+						second: '%H:%M:%S',
+						minute: '%H:%M',
+						hour: '%H:%M',
+						day: '%e. %b',
+						week: '%e. %b',
+						month: '%b \'%y',
+						year: '%Y'
+					},
 						
 					title: {
             	text: 't/h'
-        	},
-
-            /*categories: [
-                'Monday',
-                'Tuesday',
-                'Wednesday',
-                'Thursday',
-                'Friday',
-                'Saturday',
-                'Sunday'
-            ],
-
-            plotBands: [{ // visualize the weekend
-                from: 4.5,
-                to: 6.5,
-                color: 'rgba(68, 170, 213, .2)'
-            }]*/
+        	}
 
         },
         yAxis: {
@@ -99,8 +164,7 @@ $(function () {
         },
         series: [{
             name: 'SpO2',
-						
-            data: genNumber()
+            data: []
         },{
             name: 'seuil',
 						type: 'spline',
@@ -110,49 +174,6 @@ $(function () {
 
     });
 });
-		
-
-function genNumber(){
-	list=[];
-  n = 0;
-	while ( n <= 10){
-		list.push(Math.floor((Math.random() * 10) + 89.9)); 
-		n++;		
-	}
-	return list;
-}
-
-//generate serie of seuil manual
-function genSeuilManual(form) {
-    var TestVar = form.inputbox.value;
- 		var s= Number(TestVar);
-		list=[];
-		n = 0;
-		while ( n <= 10){
-			list.push(s); 
-			n++;		
-		}
-
-		var chart = $('#container').highcharts();
-        chart.series[1].setData(list);
-}
-/*
-function getSeuilManual(){
-
-	var s = prompt("Entree chiffre de seuil :")
-  var seuil = Number(s);
-	return seuil;
-}
-
-function genSeuil(s){
-	list=[];
-  n = 0;
-	while ( n <= 10){
-		list.push(s); 
-		n++;		
-	}
-	return list;
-}*/
 
 </script>
 {% endblock %}

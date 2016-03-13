@@ -1,0 +1,130 @@
+{% extends 'layout/layout.html.twig' %}
+{% block title %} 
+<title>Chart | Sync Chart</title>
+{% endblock %}
+
+{% block main_body %}
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<!--script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script-->
+
+<!--datetimepicker-->
+<!-- Include Required Prerequisites -->
+<!--script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script-->
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+ 
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+
+
+
+
+<div class="page-wrapper">
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    SyncChart
+                </h1>
+                <ol class="breadcrumb">
+                    <li class="active">
+                        <i class="fa fa-dashboard"></i> syncChart <BR>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+ 				<h2>Sensor Infomation</h2>
+				{%for sensor in sensors%}
+				{{sensor.name}}<br />{{sensor.type}}<br />
+				{%endfor%}
+				<table>
+						<tr>
+								<td width="20%">
+											Enter threshold of SpO2 in the box: 
+											<FORM NAME="myform" ACTION="" METHOD="GET">
+													<INPUT TYPE="text" NAME="inputbox" VALUE=""><P>
+													<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilSpo2(this.form)">
+											</FORM>
+								</td>
+
+								<td width="20%">
+										<!--div class="col-lg-6"-->
+											Enter threshold of MI in the box:
+										 	<FORM NAME="myform" ACTION="" METHOD="GET">
+													<INPUT TYPE="text" NAME="inputbox" VALUE=""><P>
+													<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilMI(this.form)">
+											</FORM> 
+										<!--/div>
+										<div class="col-lg-6"-->
+								</td>
+
+								<td width="20%">
+											Enter threshold of VMU in the box: 
+											<FORM NAME="myform" ACTION="" METHOD="GET">
+													<INPUT TYPE="text" NAME="inputbox" VALUE=""><P>
+													<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilVMU(this.form)">
+											</FORM>
+										<!--/div-->
+								</td>
+
+								<td width="30%">
+									Please choose date range below : <br />
+									<input size="35" type="text" name="daterange" value="06/27/2015 00:00:00 - 06/27/2015 02:00:00" />	
+								</td>
+						</tr>
+				</table>
+
+				<div id="sync-chart">
+				</div>
+
+ 	  		<div id="container" style="width: 2000px; height: 600px; margin: 0 auto">
+				</div>
+
+				<br /><br /><br /><br />
+	  </div>
+
+</div>
+
+<script type="text/javascript">
+
+$( document ).ready(function() {
+			$('input[name="daterange"]').daterangepicker({
+				    timePicker: true,
+				    timePickerIncrement: 1.0,
+						timePicker24Hour :true,
+						timePickerSeconds :true,
+				    locale: {
+				        format: 'MM/DD/YYYY HH:mm:ss'
+				    }
+		},
+
+		function(start, end, label) {
+   		//	alert("A new date range was chosen: " + start.format('MM/DD/YYYY HH:mm:ss') + ' to ' + end.format('MM/DD/YYYY HH:mm:ss'));
+				$.ajax({
+            type: "POST",
+            url: "{{ path('updatesyncchart') }}",
+						data: {tbegin: start.format('YYYY-MM-DD HH:mm:ss'), tend: end.format('YYYY-MM-DD HH:mm:ss')},
+          
+            success: function(data)
+            {
+								//alert(data);
+								$('#sync-chart').html(data);
+							  //$('#container').toggle();
+            }
+				})
+		});
+		
+});
+
+</script>
+{% endblock %}
+
+

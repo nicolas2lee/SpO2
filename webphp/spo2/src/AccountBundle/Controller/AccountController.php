@@ -2,10 +2,10 @@
 
 namespace AccountBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use FOS\UserBundle\Controller\RegistrationController as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-class AccountController extends Controller
+class AccountController extends BaseController
 {
 
 }

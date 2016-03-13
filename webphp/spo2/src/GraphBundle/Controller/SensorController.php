@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use GraphBundle\Entity\Sensor;
 use GraphBundle\Entity\Document;
 use GraphBundle\Entity\Movement;
+use GraphBundle\Entity\Spo2;
 
 
 use GraphBundle\Form\SensorType;
@@ -38,12 +39,14 @@ class SensorController extends Controller
      */
     public function indexAction()
     {
+				$user= $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $sensors = $em->getRepository('GraphBundle:Sensor')->findAll();
-			
+				$sensors = $user->getSensors();
         return $this->render('sensor/index.html.twig', array(
             'sensors' => $sensors,
-						'nbSensors' => 2,
+					
+						'user' => $user,
 						
         ));
     }
@@ -76,37 +79,61 @@ class SensorController extends Controller
           $em->flush();
 					//$myfile = fopen("webdictionary.txt", "r") or die("Unable to open file!");
 					//$contents = file_get_contents($document->getWebPath());
-					$myfile = fopen($document->getWebPath(), "r");
-					if($myfile){
-							while(($line=fgets($myfile))!== false){
-								$args=	array_map('trim', explode(';', $line));
-								if ($args[0]!="\"results_id\""){
-										
-										$movement = new Movement();
-				//	"results_id";"start";"duration";"class";"steps";"mi";"aee";"tee";"met";"vmu"
-				//       0            1      2         3      4       5     6    7     8     9
-										$movement->setTstart(str_replace('"','',$args[1]));
-										$movement->setDuration($args[2]);
-										$movement->setClass(str_replace('"','',$args[3]));
-										$movement->setNbSteps($args[4]);
-										$movement->setMI($args[5]);
-										$movement->setAEE($args[6]);
-										$movement->setTEE($args[7]);
-										$movement->setMET($args[8]);
-										$movement->setVMU($args[9]);
-										$movement->setSensor($sensor);
 
-										$em->persist($movement);
-         						$em->flush();
-								}
+					if($document->getType()== "SpO2"){
+
+							$myfile = fopen($document->getWebPath(), "r");
+							if($myfile){
+									while(($line=fgets($myfile))!== false){
+										$args=	array_map('trim', explode(';', $line));
+										if ($args[0]!="\"id\""){
+												$spo2 = new Spo2();
+												$spo2 ->setDatetime($args[1]);
+												$spo2 ->setSaturation($args[2]);
+												$spo2 ->setSensor($sensor);
+
+												$em->persist($spo2);
+				     						$em->flush();
+										}
+									}
+									fclose($myfile);
 							}
-							fclose($myfile);
-					}else{}
+					}elseif($document->getType()== "Accelerometer"){ 
 
+							$myfile = fopen($document->getWebPath(), "r");
+							if($myfile){
+									while(($line=fgets($myfile))!== false){
+										$args=	array_map('trim', explode(';', $line));
+										if ($args[0]!="\"results_id\""){
+										
+												$movement = new Movement();
+						//	"results_id";"start";"duration";"class";"steps";"mi";"aee";"tee";"met";"vmu"
+						//       0            1      2         3      4       5     6    7     8     9
+												$fullstart=str_replace('"','',$args[1]);
+												$fullstarts=explode('.', $fullstart);
+												$movement->setTstart($fullstarts[0]);
+												$movement->setDuration($args[2]);
+												$movement->setClass(str_replace('"','',$args[3]));
+												$movement->setNbSteps($args[4]);
+												$movement->setMI($args[5]);
+												$movement->setAEE($args[6]);
+												$movement->setTEE($args[7]);
+												$movement->setMET($args[8]);
+												$movement->setVMU($args[9]);
+												$movement->setSensor($sensor);
+
+												$em->persist($movement);
+				     						$em->flush();
+										}
+									}
+									fclose($myfile);
+							}else{}
+					}
+/*
 					return $this->render('UploadFile/test.html.twig', array(		    
 							'line' => $args
 					));
-					
+*/					
 					//$data = $this->chargeData($document);
           return $this->redirectToRoute('sensor_show', 
 					array('id' => $sensor->getId(),
@@ -131,6 +158,7 @@ class SensorController extends Controller
     public function newAction(Request $request)
     {
         $sensor = new Sensor();
+				$user = $this->getUser();
         $form = $this->createForm('GraphBundle\Form\SensorType', $sensor);
 				$form->add('submit', SubmitType::class, array(
             'label' => 'Create',
@@ -140,6 +168,8 @@ class SensorController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+						
+						$sensor->setUser($user);
             $em->persist($sensor);
             $em->flush();
 
@@ -164,9 +194,10 @@ class SensorController extends Controller
 				$documents=$sensor->getDocuments();
       	
         $deleteForm = $this->createDeleteForm($sensor);
-
+				$user= $sensor->getUser();
         return $this->render('sensor/show.html.twig', array(
             'sensor' => $sensor,
+						'user' =>  $user,
             'delete_form' => $deleteForm->createView(),
 						'documents' => $documents,
 						//'content' => "",

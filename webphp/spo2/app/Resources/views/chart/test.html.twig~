@@ -1,0 +1,9 @@
+<html>
+<body>
+test
+{% for q in qs %}
+		{{q.id}}
+		{{q.datetime}}
+{% endfor %}
+</body>
+</html>

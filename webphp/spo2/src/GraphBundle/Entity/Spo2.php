@@ -31,6 +31,12 @@ class Spo2
     */
 		private $datetime;
 
+		/**
+     * @ORM\ManyToOne(targetEntity="Sensor", inversedBy="spo2s")
+     * @ORM\JoinColumn(name="spo2_sensor_id", referencedColumnName="id")
+     */
+		protected $sensor;
+
     /**
      * Get id
      *
@@ -87,5 +93,29 @@ class Spo2
     public function getDatetime()
     {
         return $this->datetime;
+    }
+
+    /**
+     * Set sensor
+     *
+     * @param \GraphBundle\Entity\Sensor $sensor
+     *
+     * @return Spo2
+     */
+    public function setSensor(\GraphBundle\Entity\Sensor $sensor = null)
+    {
+        $this->sensor = $sensor;
+
+        return $this;
+    }
+
+    /**
+     * Get sensor
+     *
+     * @return \GraphBundle\Entity\Sensor
+     */
+    public function getSensor()
+    {
+        return $this->sensor;
     }
 }

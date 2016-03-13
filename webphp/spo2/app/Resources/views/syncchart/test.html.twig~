@@ -1,0 +1,10 @@
+{{spo2_s.name}}
+{{mov_s.name}}
+
+{% for s in spo2s %}
+	}
+{% endfor %}
+
+{% for m in moves %}
+	{{m.tstart}}
+{% endfor %}

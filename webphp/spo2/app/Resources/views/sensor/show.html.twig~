@@ -25,7 +25,8 @@
         </div>
         <!-- /.row -->
 				<div class= "row">
-			
+				{{user.id}}
+				{{user.username}}
 				Sensor Name {{sensor.name}}
 				<br />
 				Sensor Type {{sensor.type}}
@@ -36,10 +37,11 @@
 					{{doc.path}}<br />
 					{{doc.getWebPath()}}
 					<h3>content is<br /></h3>
-					$contents = file_get_contents($document->getWebPath());
-					{{ content }}
+					
 				{% endfor%}
 			
+				<a href="/">Upload File</a>
+
 				</div>
        	
 

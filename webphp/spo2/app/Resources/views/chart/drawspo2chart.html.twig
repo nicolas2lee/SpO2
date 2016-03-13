@@ -1,0 +1,178 @@
+
+<div id="container" style="width: 650px; height: 500px; margin: 0 auto">
+</div>
+
+<script type="text/javascript">
+
+var seuil;
+function calLessnb(timeinS){
+	alert('tmin is '+timeinS+'seuil is '+seuil)
+	alert('start time is '+new Date(spo2[0][0]))
+	var i=0;
+	var res=[]
+	while(i<spo2.length){
+			var bingo=false;
+			var endj=-1;
+			var addj=-1;
+			if (spo2[i][1]<seuil){
+					var finding=true;
+					for (var j=i+1;j<spo2.length;j++){
+						if(spo2[j][1]<seuil){
+							//	alert('< seuil '+(spo2[j][0]-spo2[i][0])/1000)
+								if ((spo2[j][0]-spo2[i][0])/1000>timeinS){	
+									bingo=true;
+									endj=j;
+									break;
+								}
+						}else{
+								//alert('> seuil '+(spo2[j][0]-spo2[i][0])/1000)
+								finding=false;
+								addj=j;
+								break;
+						}
+					}
+					if (bingo){
+							alert('from '+new Date(spo2[i][0])+' to '+new Date(spo2[endj][0]));
+							res.push([spo2[i][0], spo2[endj][0]])
+							i=endj;
+							endj=-1;	
+					}else{
+						i=addj;
+					}
+			}else{
+					i++;
+			}
+	}
+			
+
+}
+
+function toJSDate (dateTime) {
+	var dateTime = dateTime.split(" ");//dateTime[0] = date, dateTime[1] = time
+	var date = dateTime[0].split("-");
+	var time = dateTime[1].split(":");
+	//var ms = time[2].split(".");
+	//(year, month, day, hours, minutes, seconds, milliseconds)
+	return Date.UTC(date[0], date[1], date[2], time[0], time[1], time[2]);
+}
+
+function seperateData(){
+	{% for spo2Param in spo2s %}
+			var str="{{spo2Param.datetime}}";
+			starttime = toJSDate(str);
+			tstart.push(starttime);
+			spo2.push([starttime,{{spo2Param.saturation}}]);
+	{% endfor %}
+}
+
+function genSeuilManual(form) {
+    var TestVar = form.inputbox.value;
+ 		var s= Number(TestVar);
+		seuil=s;
+		list=[];
+		var n = 0;
+		//alert(spo2.length)
+		while ( n < spo2.length){
+			list.push([tstart[n],s]);
+			n++;		
+		}
+
+		var chart = $('#container').highcharts();
+        chart.series[1].setData(list);
+}
+
+$( document ).ready(function() {
+		spo2 = [];
+		seperateData();
+		$('#setMintime').click(function(){
+				
+				var minDuration=$('#minDuration').val();
+				var timeunity=$('#timeunity').val();
+				var tmin;
+				switch (timeunity){
+						case 's':
+								tmin=minDuration;
+								break;
+						case 'm':
+								tmin=minDuration*60;
+								break;
+						case 'h':
+								tmin=minDuration*60*60;
+								break;
+						case 'd':
+								tmin=minDuration*60*60*24;
+								break;
+				}
+				calLessnb(tmin);
+		})
+
+    $('#container').highcharts({
+        chart: {
+            type: 'areaspline',
+						zoomType: 'x'
+        },
+        title: {
+            text: 'SpO2 Rate'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            verticalAlign: 'top',
+            x: 150,
+            y: 20,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        },
+        xAxis: {
+					type: 'datetime',
+
+					dateTimeLabelFormats:{
+						//millisecond: '%H:%M:%S.%L',
+						second: '%H:%M:%S',
+						minute: '%H:%M',
+						hour: '%H:%M',
+						day: '%e. %b',
+						week: '%e. %b',
+						month: '%b \'%y',
+						year: '%Y'
+					},
+						
+					title: {
+            	text: 't/h'
+        	}
+
+        },
+        yAxis: {
+            title: {
+                text: 'SpO2 %'
+            }
+        },
+        tooltip: {
+            shared: true,
+            valueSuffix: ' units'
+        },
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            areaspline: {
+                fillOpacity: 0.5
+            }
+        },
+        series: [{
+            name: 'SpO2',
+            data: spo2
+        },{
+            name: 'seuil',
+						type: 'spline',
+            data: [],
+						color : "#FF0000"
+        }]
+
+    });
+});
+
+</script>
+<!--/body>
+</html-->

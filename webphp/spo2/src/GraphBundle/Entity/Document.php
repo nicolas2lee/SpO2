@@ -25,13 +25,16 @@ class Document
     private $id;
 
 		 /**
-     * @Assert\File(maxSize="6000000")
+     * @Assert\File(maxSize="500K",
+		 * mimeTypes={"application/txt"},
+		 * mimeTypesMessage = "Please upload a valid text file",
+     * disallowEmptyMessage="Please make sure it is not an empty file"
+		 *	)
      */
     private $file;
 
 		/**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
      */
     private $name;
 

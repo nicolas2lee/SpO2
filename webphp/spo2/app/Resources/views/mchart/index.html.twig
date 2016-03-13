@@ -1,10 +1,26 @@
 {% extends 'layout/layout.html.twig' %}
-{% block title %} Chart | Index{% endblock %}
+{% block title %} 
+<title>Chart | Movement Chart</title>
+{% endblock %}
 
 {% block main_body %}
 <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
+<!--script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script-->
+
+<!--datetimepicker-->
+<!-- Include Required Prerequisites -->
+<!--script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script-->
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+ 
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+
+
 
 
 <div class="page-wrapper">
@@ -19,104 +35,84 @@
                 </h1>
                 <ol class="breadcrumb">
                     <li class="active">
-                        <i class="fa fa-dashboard"></i> moveChart
+                        <i class="fa fa-dashboard"></i> moveChart <BR>
                     </li>
                 </ol>
             </div>
         </div>
         <!-- /.row -->
- 				<div><h2>Sensor Infomation</h2>
-				{{sensor.name}}
-	
-				</div>
- 	  		<div id="container" style="width: 1000px; height: 600px; margin: 0 auto">
+ 				<h2>Sensor Infomation</h2>
+				{{sensor.name}}<br /><br />
+				<table>
+						<tr>
+								<td width="10%">
+								</td>
 
+								<td width="30%">
+										<!--div class="col-lg-6"-->
+											Enter threshold of MI in the box:
+										 	<FORM NAME="myform" ACTION="" METHOD="GET">
+													<INPUT TYPE="text" NAME="inputbox" VALUE=""><P>
+													<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilMI(this.form)">
+											</FORM> 
+										<!--/div>
+										<div class="col-lg-6"-->
+								</td>
+
+								<td width="30%">
+											Enter threshold of VMU in the box: 
+											<FORM NAME="myform" ACTION="" METHOD="GET">
+													<INPUT TYPE="text" NAME="inputbox" VALUE=""><P>
+													<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilVMU(this.form)">
+											</FORM>
+										<!--/div-->
+								</td>
+
+								<td width="30%">
+									<input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />	
+								</td>
+						</tr>
+				</table>
+
+				<div id="movement-chart">
 				</div>
+
+ 	  		<div id="container" style="width: 2000px; height: 600px; margin: 0 auto">
+				</div>
+
+				<br /><br /><br /><br />
 	  </div>
 
 </div>
 
 <script type="text/javascript">
-var nbSteps=[];
-var AEE=[];
-var TEE=[];
-var MET=[];
-var VMU=[];
-function seperateData(){
-	
-	{% for mov  in movements %}
-			nbSteps.push({{mov.nbSteps}})
-			AEE.push({{mov.AEE}})
-			TEE.push({{mov.TEE}})
-			MET.push({{mov.MET}})
-	{% endfor %}
 
-}
+$( document ).ready(function() {
+			$('input[name="daterange"]').daterangepicker({
+				    timePicker: true,
+				    timePickerIncrement: 1.0,
+						timePicker24Hour :true,
+						timePickerSeconds :true,
+				    locale: {
+				        format: 'MM/DD/YYYY HH:mm:ss'
+				    }
+		},
 
-$(function () {
-		seperateData();
-    $('#container').highcharts({
-        title: {
-            text: 'Movement chart',
-            x: -20 //center
-        },
-        
-        xAxis: {
-            plotBands: [{ // visualize the class
-                from: 0.0,
-                to: 4.5,
-                color: 'rgba(255, 182, 193, .2)'
-            },{
-								from: 4.5,
-                to: 6.5,
-                color: 'rgba(68, 170, 213, .2)'
-						},{
-								from: 6.5,
-                to: 9.5,
-                color: 'rgba(134, 255, 192, .2)'
-						},{
-								from: 9.5,
-                to: 12.5,
-                color: 'rgba(255, 255, 0, .2)'
-						}],
-
-        },
-        yAxis: {
-            title: {
-                text: 'movement'
-            },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }]
-        },
-        tooltip: {
-            valueSuffix: ''
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle',
-            borderWidth: 0
-        },
-        series: [{
-            name: 'Steps',
-            data: nbSteps
-        }, {
-            name: 'AEE',
-            data: AEE
-        }, {
-            name: 'TEE',
-            data: TEE
-        }, {
-            name: 'MET',
-            data: MET
-        },{
-            name: 'VMU',
-            data: VMU
-        }]
-    });
+		function(start, end, label) {
+   			alert("A new date range was chosen: " + start.format('MM/DD/YYYY HH:mm:ss') + ' to ' + end.format('MM/DD/YYYY HH:mm:ss'));
+				$.ajax({
+            type: "POST",
+            url: "{{ path('updateMovementchart') }}",
+            data: {tbegin: start.format('YYYY-MM-DD HH:mm:ss'), tend: end.format('YYYY-MM-DD HH:mm:ss'), sensor_id: "{{sensor.id}}"},
+            success: function(data)
+            {
+								alert(data);
+								$('#movement-chart').html(data);
+							  //$('#container').toggle();
+            }
+				})
+		});
+		
 });
 
 </script>
