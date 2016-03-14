@@ -55,12 +55,12 @@ function calMeans(){
 		for (var i=0; i<spo2.length;i++){
 				sum+=spo2[i][1]
 		}
-		alert(sum*1.0/spo2.length)
+		//alert(sum*1.0/spo2.length)
 		$('#result-means').html('<font color="red">'+sum*1.0/spo2.length+'</font>')
 }
 
 function outputRes(res,t){
-	var str='value < spo2 lasting '+t+' s :'+'<br>';
+	var str='value > spo2 lasting '+t+' s :'+'<br>';
 	for(var i=0;i < res.length;i++){
 		str+='<tr>';
 		var from = new Date (res[i][0]);

@@ -60,7 +60,7 @@ function calMeans(){
 }
 
 function outputRes(res,t){
-	var str='value < spo2 lasting '+t+' s :'+'<br>';
+	var str='value > spo2 lasting >'+t+' s :'+'<br>';
 	for(var i=0;i < res.length;i++){
 		str+='<tr>';
 		var from = new Date (res[i][0]);

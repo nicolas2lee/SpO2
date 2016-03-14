@@ -25,7 +25,7 @@ class Document
     private $id;
 
 		 /**
-     * @Assert\File(maxSize="500K",
+     * @Assert\File(maxSize="500M",
 		 * mimeTypes={"text/plain"},
 		 * mimeTypesMessage = "Please upload a valid text file",
      * disallowEmptyMessage="Please make sure it is not an empty file"
