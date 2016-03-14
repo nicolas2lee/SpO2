@@ -5,8 +5,11 @@ use Symfony\Component\Routing\Route;
 
 $collection = new RouteCollection();
 
-$collection->add('account_homepage', new Route('/', array(
+$collection->add('account_homepage', new Route('/account', array(
     '_controller' => 'AccountBundle:Default:index',
 )));
 
+$collection->add('account_homepage', new Route('/account', array(
+    '_controller' => 'AccountBundle:Profile:index',
+)));
 return $collection;

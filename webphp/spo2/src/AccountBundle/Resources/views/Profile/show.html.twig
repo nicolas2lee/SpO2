@@ -44,7 +44,41 @@
                 </ol>
             </div>
         </div>
-				test
-		</div>
+				<h4>Username : {{user.username}}</h4>
+				<h4>Email : {{user.email}}</h4>
+				<a href="/profile/edit">Change your coordinates</a>
+				<br />
+				<br />
+				<h4>List of My Sensors</h4>
+				<div class="table-responsive">
+				<table class="table table-bordered table-hover table-striped">
+					<thead>
+						<tr>
+							<td>
+								<b>Sensor name</b>
+							</td>
+							<td>
+								<b>Sensor type</b>
+							</td>
+						</tr>
+					</thead>
+					<tbody>	
+						{% for s in user.sensors() %}
+						<tr>
+							<td>
+								{{s.name}}
+							</td>
+							<td>
+								{{s.type}}
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+							<a href="/graph/{{user.id}}/sensors">more details about sensors</a>
+				<br />	<br />
+				</div>
+			
+	</div>
 </div>
 {% endblock %}

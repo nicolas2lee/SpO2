@@ -2,10 +2,44 @@
 
 namespace AccountBundle\Controller;
 
-use FOS\UserBundle\Controller\RegistrationController as BaseController;
+use FOS\UserBundle\Controller\ProfileController as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-class AccountController extends Controller
+
+use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Event\GetResponseUserEvent;
+use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
+
+
+class AccountController extends BaseController
 {
 
+		public function showAction()
+		{
+				$user = $this->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+				$flag=false;
+				for ($user.getRoles as r){
+						if (r == 'ROLE_ADMIN'){
+								$flag=true;						
+						}
+				}
+
+				if ($flag == true){
+		        return $this->render('AccountBundle:Profile:test.html.twig', array(
+		            'user' => $user,
+								'flag' => $flag
+		        ));
+				}else{
+						 return $this->render('AccountBundle:Profile:test.html.twig', array(
+		            'user' => $user,
+								'flag' => $flag
+		        ));
+				}
+		}
 }

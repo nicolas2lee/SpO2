@@ -50,7 +50,7 @@
 																		<td><a href="{{ path('sensor_show', { 'id': sensor.id }) }}">{{ sensor.id }}</a></td>
 																		<td>{{ sensor.name }}</td>
 																		<td>{{ sensor.type }}</td>
-																		<td>{#{ sensor.user.id }}</td>
+																		<td>{#{ sensor.user.id }#}</td>
 																		<td>
 																				<ul>
 																				    <li>

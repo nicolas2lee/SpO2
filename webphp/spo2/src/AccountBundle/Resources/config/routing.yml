@@ -1,0 +1,12 @@
+homepage:
+    pattern: /
+    defaults: {_controller: FOSUserBundle:Security:login}
+    requirements:
+      _method: GET
+
+display_user_profile:
+    pattern: /{user_id}/profile
+    defaults: {_controller: AccountBundle:Profile:displayUser}
+    requirements:
+      _method: GET
+

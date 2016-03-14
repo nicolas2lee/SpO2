@@ -27,34 +27,44 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Sensor controller.
  *
- * @Route("/sensor")
+ * @Route("/")
  */
 class SensorController extends Controller
 {
     /**
      * Lists all Sensor entities.
      *
-     * @Route("/", name="sensor_index")
+     * @Route("/{user_id}/sensors", name="sensor_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction($user_id)
     {
+				$em = $this->getDoctrine()->getManager();
+				$askuser= $em->getRepository('AccountBundle:User')->find($user_id);
 				$user= $this->getUser();
-        $em = $this->getDoctrine()->getManager();
-        $sensors = $em->getRepository('GraphBundle:Sensor')->findAll();
-				$sensors = $user->getSensors();
-        return $this->render('sensor/index.html.twig', array(
-            'sensors' => $sensors,
+				$flag=false;
+				$roles=$user->getRoles();
+				foreach ($roles as $r){
+						if ($r == 'ROLE_ADMIN'){
+								$flag=true;						
+						}
+				}
+        if ($askuser->getId()==$user->getId() || $flag==true){
+		      //$sensors = $em->getRepository('GraphBundle:Sensor')->findAll();
+					$sensors = $askuser->getSensors();
+		      return $this->render('sensor/index.html.twig', array(
+		          'sensors' => $sensors,
 					
-						'user' => $user,
+							'user' => $askuser,
 						
-        ));
+		      ));
+				}
     }
 
 
 		/**
      *
-     * @Route("/{sensor_id}/uploadfile", name="sensor_uploadfile")
+     * @Route("sensor/{sensor_id}/uploadfile", name="sensor_uploadfile")
      * @Method({"GET", "POST"})
      */
 		public function uploadfileAction(Request $request, $sensor_id){
