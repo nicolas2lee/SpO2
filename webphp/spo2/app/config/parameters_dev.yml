@@ -3,7 +3,7 @@ parameters:
     database_port_dev: null
     database_name_dev: spo2_dev
     database_user_dev: root
-    database_password_dev: root
+    database_password_dev: "p"
     #database_path: "%kernel.root_dir%/data/spo2.sqlite3"
 
     mailer_transport_dev: smtp

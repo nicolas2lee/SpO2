@@ -40,8 +40,8 @@
 																		<th>Id</th>
 																		<th>Name</th>
 																		<th>Type</th>
-																
 																		<th>Actions</th>
+																		<th>link to chart</th>
 																</tr>
 														</thead>
 														<tbody>
@@ -60,6 +60,13 @@
 																				        <a href="{{ path('sensor_edit', { 'id': sensor.id }) }}">edit</a>
 																				    </li>
 																				</ul>
+																		</td>
+																		<td>
+																				{% if sensor.type == 'SpO2'%}
+															<a href="/graph/chart/{{sensor.id}}/spo2">SpO2 chart</a>
+																				{% elseif sensor.type == 'Accelerometer'%}
+															<a href="/graph/chart/{{sensor.id}}/movegraph">Movement chart</a>
+																				{% endif %}
 																		</td>
 																</tr>
 														{% endfor %}

@@ -26,7 +26,7 @@ class Document
 
 		 /**
      * @Assert\File(maxSize="500K",
-		 * mimeTypes={"application/txt"},
+		 * mimeTypes={"text/plain"},
 		 * mimeTypesMessage = "Please upload a valid text file",
      * disallowEmptyMessage="Please make sure it is not an empty file"
 		 *	)
@@ -34,7 +34,7 @@ class Document
     private $file;
 
 		/**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $name;
 

@@ -40,7 +40,7 @@ class SensorController extends Controller
     public function indexAction($user_id)
     {
 				$em = $this->getDoctrine()->getManager();
-				$askuser= $em->getRepository('AccountBundle:fos_user')->find($user_id);
+				$askuser= $em->getRepository('AccountBundle:User')->find($user_id);
 				$user= $this->getUser();
 				$flag=false;
 				$roles=$user->getRoles();
@@ -61,6 +61,28 @@ class SensorController extends Controller
 				}
     }
 
+
+		/**
+     * Lists all Sensor entities.
+     *
+     * @Route("/sensors", name="my_sensor_index")
+     * @Method("GET")
+     */
+    public function myindexAction()
+    {
+				$em = $this->getDoctrine()->getManager();
+				$user= $this->getUser();
+				
+      
+					$sensors = $user->getSensors();
+		      return $this->render('sensor/index.html.twig', array(
+		          'sensors' => $sensors,
+					
+							'user' => $askuser,
+						
+		      ));
+				
+    }
 
 		/**
      *

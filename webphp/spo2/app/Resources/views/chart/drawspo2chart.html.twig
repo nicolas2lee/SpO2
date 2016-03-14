@@ -1,13 +1,16 @@
 
-<div id="container" style="width: 650px; height: 500px; margin: 0 auto">
+<div id="container" style="width: 900px; height: 500px; margin: 0 auto">
 </div>
 
 <script type="text/javascript">
 
-var seuil;
+var seuil=-1;
 function calLessnb(timeinS){
-	alert('tmin is '+timeinS+'seuil is '+seuil)
-	alert('start time is '+new Date(spo2[0][0]))
+	//alert('tmin is '+timeinS+'seuil is '+seuil)
+	//alert('start time is '+new Date(spo2[0][0]))
+	if (seuil==-1){
+		alert('Seuil not define, pleas define the seuil at first.')
+	}
 	var i=0;
 	var res=[]
 	while(i<spo2.length){
@@ -32,7 +35,7 @@ function calLessnb(timeinS){
 						}
 					}
 					if (bingo){
-							alert('from '+new Date(spo2[i][0])+' to '+new Date(spo2[endj][0]));
+							//alert('from '+new Date(spo2[i][0])+' to '+new Date(spo2[endj][0]));
 							res.push([spo2[i][0], spo2[endj][0]])
 							i=endj;
 							endj=-1;	
@@ -43,8 +46,34 @@ function calLessnb(timeinS){
 					i++;
 			}
 	}
-			
+			outputRes(res,timeinS);
 
+}
+
+function calMeans(){
+		var sum=0;
+		for (var i=0; i<spo2.length;i++){
+				sum+=spo2[i][1]
+		}
+		//alert(sum*1.0/spo2.length)
+		$('#result-means').html('<font color="red">'+sum*1.0/spo2.length+'</font>')
+}
+
+function outputRes(res,t){
+	var str='value < spo2 lasting '+t+' s :'+'<br>';
+	for(var i=0;i < res.length;i++){
+		str+='<tr>';
+		var from = new Date (res[i][0]);
+		var to = new Date(res[i][1]);
+		str+= '<td>'+'from '+'<font color="red">'+from.toString() +'</font>'+ ' to '+'<font color="red">' +to.toString()+'</font>'+'</td>'+'<br>';
+		str+='</tr>';
+	}
+	//alert(str)
+	if (res.length==0){
+			str+="No result matchs your requirment.<br>"
+	}
+	str+='<br>'
+	$('#mynb-result').html(str);
 }
 
 function toJSDate (dateTime) {
@@ -52,15 +81,18 @@ function toJSDate (dateTime) {
 	var date = dateTime[0].split("-");
 	var time = dateTime[1].split(":");
 	//var ms = time[2].split(".");
-	//(year, month, day, hours, minutes, seconds, milliseconds)
-	return Date.UTC(date[0], date[1], date[2], time[0], time[1], time[2]);
+	//(year, month, day, hours, minutes, seconds)
+	//alert(date[0]+' '+date[1]+' '+date[2])
+	return Date.UTC(date[0], date[1]-1, date[2], time[0], time[1], time[2]);
 }
 
 function seperateData(){
 	{% for spo2Param in spo2s %}
 			var str="{{spo2Param.datetime}}";
+			//alert(str);
 			starttime = toJSDate(str);
 			tstart.push(starttime);
+			//alert((new Date(starttime)).toUTCString())
 			spo2.push([starttime,{{spo2Param.saturation}}]);
 	{% endfor %}
 }
@@ -104,6 +136,10 @@ $( document ).ready(function() {
 								break;
 				}
 				calLessnb(tmin);
+		})
+
+		$('#cal-means').click(function(){
+				calMeans()
 		})
 
     $('#container').highcharts({

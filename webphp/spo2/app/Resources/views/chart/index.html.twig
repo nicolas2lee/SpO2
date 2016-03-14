@@ -34,19 +34,22 @@
 				{{sensor.name}}<br /><br /> 
 				<table  >
 					<tr>
-						<td width="10%"></td>
-						<td width="30%">
+						<td width="1%"></td>
+						<td width="29%">
 			Please choose date range below : <br />
-							<input size="35" type="text" name="daterange" value="06/27/2015 00:00:00 - 06/27/2015 01:00:00" />
+							<input size="35" type="text" name="daterange" value="06/27/2015 00:00:00 - 06/27/2015 01:00:00" /><br /><br />
+			<input id= "cal-means" TYPE="button" NAME="button" Value="calculate means"></input><div id="result-means"></div>
 						</td>
-						<td width="20%">	
+
+						<td width="10%"></td>
+						<td width="30%">	
 			Enter seuil in the box: <br />
 													 	<FORM NAME="myform" ACTION="" METHOD="GET">
 																<INPUT TYPE="text" NAME="inputbox" VALUE=""></input><br />
 																<INPUT TYPE="button" NAME="button" Value="Submit" onClick="genSeuilManual(this.form)"></input>
 														</FORM>
 						</td>
-						<td width="20%">
+						<td width="30%">
 					Enter the minimum duration <br />
 					when value > spo2 continously<br />
 					<input id="minDuration" TYPE="text" NAME="inputbox" VALUE=""></input>
@@ -56,16 +59,22 @@
 						 <option value="h">h</option>
 						 <option value="d">d</option>
 					</select><br />
-					<input id= "setMintime" TYPE="button" NAME="button" Value="Submit" onClick="setMintime"></input>
+					<input id= "setMintime" TYPE="button" NAME="button" Value="Submit" onClick="setMintime"></input>The result is below the graph.
 						</td>
 						
+
 					</tr>
 				</table>
 				<br /><br />
 				<div id="spo2-chart">
 				</div>
- 	  		<div id="container-main" style="width: 650px; height: 500px; margin: 0 auto">
+ 	  		<div id="container-main" style="width: 900px; height: 500px; margin: 0 auto">
 				</div>
+				<table>
+							<tbody>
+								<div id="mynb-result"></div>
+							</tbody>
+				</table>
 	  </div>
 
 </div>
@@ -93,7 +102,7 @@ $( document ).ready(function() {
 		},
 
 		function(start, end, label) {
-   			alert("A new date range was chosen: " + start.format('MM/DD/YYYY HH:mm:ss') + ' to ' + end.format('MM/DD/YYYY HH:mm:ss'));
+   			//alert("A new date range was chosen: " + start.format('MM/DD/YYYY HH:mm:ss') + ' to ' + end.format('MM/DD/YYYY HH:mm:ss'));
 				$.ajax({
             type: "POST",
             url: "{{ path('updateSpo2chart') }}",

@@ -63,6 +63,28 @@ class SensorController extends Controller
 
 
 		/**
+     * Lists all Sensor entities.
+     *
+     * @Route("/sensors", name="my_sensor_index")
+     * @Method("GET")
+     */
+    public function myindexAction()
+    {
+				$em = $this->getDoctrine()->getManager();
+				$user= $this->getUser();
+				
+      
+					$sensors = $user->getSensors();
+		      return $this->render('sensor/index.html.twig', array(
+		          'sensors' => $sensors,
+					
+							'user' => $user,
+						
+		      ));
+				
+    }
+
+		/**
      *
      * @Route("sensor/{sensor_id}/uploadfile", name="sensor_uploadfile")
      * @Method({"GET", "POST"})
