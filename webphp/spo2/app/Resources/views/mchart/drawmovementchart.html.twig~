@@ -1,5 +1,5 @@
 
-<div id="container" style="width: 650px; height: 500px; margin: 0 auto">
+<div id="container" style="width: 1000px; height: 500px; margin: 0 auto">
 </div>
 <script type="text/javascript">
 var nbSteps=[];
@@ -33,6 +33,7 @@ function seperateData(){
 			TEE.push([starttime, {{mov.TEE}}]);		
 			MET.push([starttime, {{mov.MET}}]);
 			MI.push([starttime, {{mov.MI}}]);
+			VMU.push([starttime, {{mov.VMU}}]);
 			moveclass.push("{{mov.class}}");
 	{% endfor %}
 }
