@@ -42,6 +42,7 @@ function seperateData(){
 		TEE.push([starttime, {{mov.TEE}}]);		
 		MET.push([starttime, {{mov.MET}}]);
 		MI.push([starttime, {{mov.MI}}]);
+		VMU.push([starttime, {{mov.VMU}}]);
 		moveclass.push("{{mov.class}}");
 	{% endfor %}
 
@@ -79,14 +80,13 @@ function genSeuilMI(form) {
     var TestVar = form.inputbox.value;
 		//alert(TestVar);
  		var s= Number(TestVar);
-		seuil=s;
-		list=[];
+		var list=[];
 		var n = 0;
 		while ( n < tstart.length){
 			list.push([tstart[n],s]); 
 			n++;		
 		}
-		//alert(list.length);
+		alert(list.length);
 		var chart = $('#container').highcharts();
         chart.series[6].setData(list);
 }
@@ -95,7 +95,7 @@ function genSeuilVMU(form) {
     var TestVar = form.inputbox.value;
 		//alert(TestVar);
  		var s= Number(TestVar);
-		list=[];
+		var list=[];
 		var n = 0;
 		while ( n < tstart.length){
 			list.push([tstart[n],s]); 
@@ -109,10 +109,10 @@ function genSeuilVMU(form) {
 function genSeuilSpo2(form) {
     var TestVar = form.inputbox.value;
  		var s= Number(TestVar);
-		list=[];
+		var list=[];
 		var n = 0;
 		//alert(spo2.length)
-		while ( n < spo2.length){
+		while ( n < tbegin.length){
 			list.push([tbegin[n],s]);
 			n++;		
 		}
@@ -239,6 +239,7 @@ $(document).ready(function() {
         },{
             name: 'threshold of MI',
 						type: 'spline',
+						yAxis: 2,
             data: [],
 						color : "#FF0000"
         },{
